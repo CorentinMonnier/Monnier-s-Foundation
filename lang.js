@@ -1,0 +1,52 @@
+function setLang(lang) {
+  document.querySelectorAll('[data-en]').forEach(function (el) {
+    el.textContent = el.getAttribute('data-' + lang);
+  });
+  document.documentElement.lang = lang;
+  document.querySelectorAll('.lang-btn').forEach(function (btn) {
+    btn.classList.toggle('active', btn.dataset.lang === lang);
+  });
+  localStorage.setItem('site-lang', lang);
+  updateSectionLabel(currentSection, lang);
+}
+
+var currentSection = 'home';
+var currentLang = 'en';
+
+function updateSectionLabel(sectionId, lang) {
+  var section = document.getElementById(sectionId);
+  var label = document.getElementById('sectionLabel');
+  if (!section || !label) return;
+  var text = section.getAttribute('data-label-' + lang);
+  label.textContent = text || '';
+  label.classList.toggle('visible', sectionId !== 'home');
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  currentLang = localStorage.getItem('site-lang') || 'en';
+  setLang(currentLang);
+
+  document.querySelectorAll('.lang-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      currentLang = btn.dataset.lang;
+      setLang(currentLang);
+    });
+  });
+
+  var sections = document.querySelectorAll('section.panel');
+  var navLinks = document.querySelectorAll('.nav-link');
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+        currentSection = entry.target.id;
+        updateSectionLabel(currentSection, currentLang);
+        navLinks.forEach(function (link) {
+          link.classList.toggle('active', link.dataset.section === currentSection);
+        });
+      }
+    });
+  }, { threshold: [0.5] });
+
+  sections.forEach(function (s) { observer.observe(s); });
+});

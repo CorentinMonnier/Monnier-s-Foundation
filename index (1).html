@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monnier's Foundation</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-name">Monnier's Foundation</span>
+        <span class="brand-current" id="sectionLabel"></span>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="#home" class="nav-link" data-section="home" data-en="Home" data-fr="Accueil">Home</a></li>
+          <li><a href="#corentin" class="nav-link" data-section="corentin">Corentin</a></li>
+          <li class="lang-toggle">
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="fr">FR</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <section class="panel" id="home" data-label-en="Home" data-label-fr="Accueil">
+    <svg class="orbit-graphic" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="orbitGrad" x1="0" y1="0" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#26314F"/>
+          <stop offset="1" stop-color="#B08D57"/>
+        </linearGradient>
+      </defs>
+      <circle cx="200" cy="200" r="180" stroke="url(#orbitGrad)" stroke-width="0.6" opacity="0.35"/>
+      <ellipse cx="200" cy="200" rx="180" ry="90" stroke="url(#orbitGrad)" stroke-width="0.6" opacity="0.45" transform="rotate(-20 200 200)"/>
+      <ellipse cx="200" cy="200" rx="150" ry="70" stroke="url(#orbitGrad)" stroke-width="0.6" opacity="0.5" transform="rotate(35 200 200)"/>
+      <circle cx="200" cy="200" r="2.5" fill="#B08D57"/>
+      <circle cx="356" cy="150" r="3" fill="#26314F" opacity="0.7"/>
+      <circle cx="70" cy="270" r="2" fill="#B08D57" opacity="0.6"/>
+    </svg>
+
+    <div class="panel-inner hero">
+      <div class="hero-eyebrow" data-en="Monnier's Foundation" data-fr="Monnier's Foundation">Monnier's Foundation</div>
+      <h1 data-en="Where our projects and ideas live." data-fr="Là où vivent nos projets et nos idées.">Where our projects and ideas live.</h1>
+      <p data-en="This is our shared space — the people, the ventures, and the thinking behind them. Still early days, built and refined as we go." data-fr="Ceci est notre espace commun — les personnes, les projets, et les idées derrière. On en est aux débuts, on construit et on peaufine au fur et à mesure.">This is our shared space — the people, the ventures, and the thinking behind them. Still early days, built and refined as we go.</p>
+      <div class="scroll-hint">
+        <span data-en="Scroll" data-fr="Défiler">Scroll</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CORENTIN ============ -->
+  <section class="panel" id="corentin" data-label-en="Corentin Monnier" data-label-fr="Corentin Monnier">
+    <div class="panel-inner person-grid">
+      <img class="person-photo" src="images/corentin.jpg" alt="Corentin Alexandre Monnier">
+
+      <div>
+        <h2 class="person-name">Corentin Alexandre Monnier</h2>
+        <div class="person-role" data-en="Founder, Arctik Spike — Venture Capital track" data-fr="Fondateur, Arctik Spike — Orienté Capital-risque">Founder, Arctik Spike — Venture Capital track</div>
+
+        <p class="person-summary" data-en="Entrepreneurial and curious, Corentin brings a strong business mindset shaped by hands-on experience and a drive to turn ideas into tangible projects. Naturally drawn to new industries and opportunities, he's building toward a career in venture capital — combining analytical rigor with an instinct for what makes a business work." data-fr="Entrepreneur et curieux de nature, Corentin a développé un vrai sens des affaires à travers l'expérience du terrain et l'envie de concrétiser ses idées. Naturellement attiré par de nouveaux secteurs et de nouvelles opportunités, il se construit un parcours vers le capital-risque, entre rigueur analytique et instinct pour ce qui fait fonctionner une entreprise.">Entrepreneurial and curious, Corentin brings a strong business mindset shaped by hands-on experience and a drive to turn ideas into tangible projects. Naturally drawn to new industries and opportunities, he's building toward a career in venture capital — combining analytical rigor with an instinct for what makes a business work.</p>
+
+        <div class="facts-row">
+          <div>
+            <div class="fact-label" data-en="Education" data-fr="Formation">Education</div>
+            <div class="fact-value">EHL — BSc International Hospitality Management</div>
+          </div>
+          <div>
+            <div class="fact-label" data-en="Based in" data-fr="Basé à">Based in</div>
+            <div class="fact-value">Geneva, Switzerland</div>
+          </div>
+          <div>
+            <div class="fact-label" data-en="Languages" data-fr="Langues">Languages</div>
+            <div class="fact-value">FR · EN · DE · ES</div>
+          </div>
+        </div>
+
+        <div class="venture-block">
+          <h3 data-en="Arctik Spike" data-fr="Arctik Spike">Arctik Spike</h3>
+          <p data-en="Founder of Arctik Spike, Switzerland's first roundnet (spikeball) brand, launched in August 2025. Corentin leads product development, branding, and go-to-market strategy end to end — designing a set built to be more durable, better looking, and easier to take anywhere, from research and positioning through sourcing and launch." data-fr="Fondateur d'Arctik Spike, la première marque suisse de roundnet (spikeball), lancée en août 2025. Corentin pilote le développement produit, le branding et la stratégie de lancement de bout en bout — un set pensé pour être plus robuste, plus beau et plus nomade, de l'étude de marché au positionnement, jusqu'au sourcing et au lancement.">Founder of Arctik Spike, Switzerland's first roundnet (spikeball) brand, launched in August 2025. Corentin leads product development, branding, and go-to-market strategy end to end — designing a set built to be more durable, better looking, and easier to take anywhere, from research and positioning through sourcing and launch.</p>
+          <a class="venture-link" href="https://arctikspike.com/" target="_blank" rel="noopener" data-en="Visit arctikspike.com →" data-fr="Visiter arctikspike.com →">Visit arctikspike.com →</a>
+        </div>
+
+        <div class="venture-block">
+          <h3 data-en="Leadership" data-fr="Leadership">Leadership</h3>
+          <p data-en="Head of Events for the TEDxEHL Committee since February 2026, directing the strategic planning and execution of a large-scale TEDx event — from operational logistics to team leadership under pressure." data-fr="Head of Events du comité TEDxEHL depuis février 2026, en charge de la planification stratégique et de l'exécution d'un événement TEDx d'ampleur — de la logistique opérationnelle au pilotage d'équipe sous pression.">Head of Events for the TEDxEHL Committee since February 2026, directing the strategic planning and execution of a large-scale TEDx event — from operational logistics to team leadership under pressure.</p>
+        </div>
+
+        <p class="contact-line"><span data-en="Contact:" data-fr="Contact :">Contact:</span> <a href="mailto:corentin.monnier@bluewin.ch">corentin.monnier@bluewin.ch</a></p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 Monnier's Foundation
+  </footer>
+
+  <script src="lang.js"></script>
+</body>
+</html>

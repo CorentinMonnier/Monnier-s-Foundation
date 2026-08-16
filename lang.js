@@ -35,6 +35,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
   var sections = document.querySelectorAll('section.panel');
   var navLinks = document.querySelectorAll('.nav-link');
+  var dots = document.querySelectorAll('.dot');
+  var reveals = document.querySelectorAll('.reveal');
 
   var observer = new IntersectionObserver(function (entries) {
     entries.forEach(function (entry) {
@@ -44,9 +46,23 @@ document.addEventListener('DOMContentLoaded', function () {
         navLinks.forEach(function (link) {
           link.classList.toggle('active', link.dataset.section === currentSection);
         });
+        dots.forEach(function (dot) {
+          dot.classList.toggle('active', dot.dataset.section === currentSection);
+        });
       }
     });
   }, { threshold: [0.5] });
 
   sections.forEach(function (s) { observer.observe(s); });
+
+  var revealObserver = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.2 });
+
+  reveals.forEach(function (el) { revealObserver.observe(el); });
 });

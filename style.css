@@ -1,12 +1,13 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;500;600;700&display=swap');
 
 :root {
-  --color-ink: #12151C;
-  --color-ink-soft: #5B6472;
+  --color-ink: #0E1016;
+  --color-ink-soft: #4B5364;
   --color-ink-faint: #8A93A3;
-  --color-navy: #26314F;
-  --color-gold: #B08D57;
-  --color-line: rgba(18, 21, 28, 0.08);
+  --color-navy: #1D2C52;
+  --color-gold: #C79A56;
+  --color-accent-2: #A1523F;
+  --color-line: rgba(18, 21, 28, 0.09);
   --color-header-bg: rgba(255, 255, 255, 0.72);
   --font: 'Inter', sans-serif;
   --max-width: 1080px;
@@ -70,9 +71,9 @@ a:hover, a:focus-visible {
 }
 
 .brand-name {
-  font-weight: 600;
-  font-size: 1.05rem;
-  letter-spacing: -0.01em;
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: -0.015em;
 }
 
 .brand-current {
@@ -177,6 +178,18 @@ section.panel {
   justify-content: center;
 }
 
+.hero-brand {
+  font-weight: 700;
+  font-size: clamp(1.7rem, 3.2vw, 2.3rem);
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  margin-bottom: 1.1rem;
+  background: linear-gradient(100deg, var(--color-navy) 0%, var(--color-gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 .hero-eyebrow {
   color: var(--color-gold);
   font-weight: 500;
@@ -224,22 +237,52 @@ section.panel {
 }
 
 /* Abstract decorative graphic */
-.orbit-graphic {
+.tree-graphic {
   position: absolute;
   top: 50%;
-  right: -10%;
+  right: -8%;
   transform: translateY(-50%);
-  width: min(60vw, 720px);
-  height: min(60vw, 720px);
+  width: min(58vw, 680px);
+  height: min(58vw, 680px);
   z-index: 1;
-  opacity: 0.9;
+  opacity: 0.95;
   pointer-events: none;
 }
 
+.draw-path {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+}
+
+.blossom {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.blossom.ready {
+  opacity: 0.55;
+  animation: blossom-pulse 4s ease-in-out infinite;
+}
+
+.blossom:nth-of-type(2) {
+  animation-delay: 1.3s;
+}
+
+.blossom:nth-of-type(3) {
+  animation-delay: 2.6s;
+}
+
+@keyframes blossom-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.35); }
+}
+
 @media (max-width: 800px) {
-  .orbit-graphic {
-    opacity: 0.35;
-    right: -30%;
+  .tree-graphic {
+    opacity: 0.4;
+    right: -25%;
   }
 }
 
@@ -420,5 +463,16 @@ a:focus-visible, button:focus-visible {
   }
   .scroll-hint svg {
     animation: none;
+  }
+  .blossom {
+    transition: none;
+  }
+  .blossom.ready {
+    animation: none;
+    opacity: 0.85;
+  }
+  .draw-path {
+    stroke-dasharray: none !important;
+    stroke-dashoffset: 0 !important;
   }
 }

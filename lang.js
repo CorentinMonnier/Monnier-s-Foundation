@@ -65,4 +65,45 @@ document.addEventListener('DOMContentLoaded', function () {
   }, { threshold: 0.2 });
 
   reveals.forEach(function (el) { revealObserver.observe(el); });
+
+  animateTree();
 });
+
+function animateTree() {
+  var svg = document.querySelector('.tree-graphic');
+  if (!svg) return;
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var paths = svg.querySelectorAll('.draw-path');
+  var blossoms = svg.querySelectorAll('.blossom');
+
+  if (reduceMotion) {
+    blossoms.forEach(function (b) { b.classList.add('ready'); });
+    return;
+  }
+
+  var maxFinish = 0;
+
+  paths.forEach(function (path) {
+    var tier = parseInt(path.dataset.tier || '0', 10);
+    var length = path.getTotalLength();
+    var duration = 900 - tier * 130;
+    var delay = tier * 340;
+
+    path.style.strokeDasharray = length;
+    path.style.strokeDashoffset = length;
+    // force reflow so the transition below actually animates
+    path.getBoundingClientRect();
+    path.style.transition = 'stroke-dashoffset ' + duration + 'ms ease-out ' + delay + 'ms';
+
+    requestAnimationFrame(function () {
+      path.style.strokeDashoffset = '0';
+    });
+
+    maxFinish = Math.max(maxFinish, delay + duration);
+  });
+
+  setTimeout(function () {
+    blossoms.forEach(function (b) { b.classList.add('ready'); });
+  }, maxFinish + 150);
+}

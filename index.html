@@ -36,23 +36,40 @@
 
   <!-- ============ HOME ============ -->
   <section class="panel" id="home" data-label-en="Home" data-label-fr="Accueil">
-    <svg class="orbit-graphic" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <svg class="tree-graphic" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <defs>
-        <linearGradient id="orbitGrad" x1="0" y1="0" x2="400" y2="400" gradientUnits="userSpaceOnUse">
+        <linearGradient id="treeGrad" x1="0" y1="400" x2="300" y2="0" gradientUnits="userSpaceOnUse">
           <stop offset="0" stop-color="#26314F"/>
-          <stop offset="1" stop-color="#B08D57"/>
+          <stop offset="1" stop-color="#C79A56"/>
         </linearGradient>
       </defs>
-      <circle cx="200" cy="200" r="180" stroke="url(#orbitGrad)" stroke-width="0.6" opacity="0.35"/>
-      <ellipse cx="200" cy="200" rx="180" ry="90" stroke="url(#orbitGrad)" stroke-width="0.6" opacity="0.45" transform="rotate(-20 200 200)"/>
-      <ellipse cx="200" cy="200" rx="150" ry="70" stroke="url(#orbitGrad)" stroke-width="0.6" opacity="0.5" transform="rotate(35 200 200)"/>
-      <circle cx="200" cy="200" r="2.5" fill="#B08D57"/>
-      <circle cx="356" cy="150" r="3" fill="#26314F" opacity="0.7"/>
-      <circle cx="70" cy="270" r="2" fill="#B08D57" opacity="0.6"/>
+      <!-- trunk -->
+      <path class="draw-path" data-tier="0" d="M200 390 C198 340 202 300 197 250" stroke="url(#treeGrad)" stroke-width="1.6" stroke-linecap="round" opacity="0.8"/>
+      <!-- primary branches -->
+      <path class="draw-path" data-tier="1" d="M197 250 C180 220 150 205 118 175" stroke="url(#treeGrad)" stroke-width="1.1" stroke-linecap="round" opacity="0.75"/>
+      <path class="draw-path" data-tier="1" d="M197 250 C210 215 245 195 288 168" stroke="url(#treeGrad)" stroke-width="1.1" stroke-linecap="round" opacity="0.75"/>
+      <path class="draw-path" data-tier="1" d="M197 250 C196 205 200 170 192 128" stroke="url(#treeGrad)" stroke-width="1.1" stroke-linecap="round" opacity="0.75"/>
+      <!-- secondary branches, left -->
+      <path class="draw-path" data-tier="2" d="M118 175 C100 155 90 130 72 100" stroke="url(#treeGrad)" stroke-width="0.75" stroke-linecap="round" opacity="0.6"/>
+      <path class="draw-path" data-tier="2" d="M118 175 C112 148 122 122 112 90" stroke="url(#treeGrad)" stroke-width="0.75" stroke-linecap="round" opacity="0.6"/>
+      <!-- secondary branches, right -->
+      <path class="draw-path" data-tier="2" d="M288 168 C308 148 316 120 336 92" stroke="url(#treeGrad)" stroke-width="0.75" stroke-linecap="round" opacity="0.6"/>
+      <path class="draw-path" data-tier="2" d="M288 168 C294 140 282 116 292 84" stroke="url(#treeGrad)" stroke-width="0.75" stroke-linecap="round" opacity="0.6"/>
+      <!-- secondary branches, center -->
+      <path class="draw-path" data-tier="2" d="M192 128 C178 105 182 80 168 55" stroke="url(#treeGrad)" stroke-width="0.75" stroke-linecap="round" opacity="0.6"/>
+      <path class="draw-path" data-tier="2" d="M192 128 C204 102 200 78 214 52" stroke="url(#treeGrad)" stroke-width="0.75" stroke-linecap="round" opacity="0.6"/>
+      <!-- tertiary twigs -->
+      <path class="draw-path" data-tier="3" d="M72 100 C64 85 68 68 58 52" stroke="url(#treeGrad)" stroke-width="0.5" stroke-linecap="round" opacity="0.45"/>
+      <path class="draw-path" data-tier="3" d="M336 92 C344 76 340 58 350 42" stroke="url(#treeGrad)" stroke-width="0.5" stroke-linecap="round" opacity="0.45"/>
+      <path class="draw-path" data-tier="3" d="M168 55 C160 40 164 24 154 10" stroke="url(#treeGrad)" stroke-width="0.5" stroke-linecap="round" opacity="0.45"/>
+      <!-- blossoms: the "taches" -->
+      <circle class="blossom" cx="112" cy="90" r="3.2" fill="#C79A56"/>
+      <circle class="blossom" cx="292" cy="84" r="2.8" fill="#A1523F"/>
+      <circle class="blossom" cx="214" cy="52" r="3" fill="#C79A56"/>
     </svg>
 
     <div class="panel-inner hero">
-      <div class="hero-eyebrow" data-en="Monnier's Foundation" data-fr="Monnier's Foundation">Monnier's Foundation</div>
+      <div class="hero-brand" data-en="Monnier's Foundation" data-fr="Monnier's Foundation">Monnier's Foundation</div>
       <h1 data-en="Where our projects and ideas live." data-fr="Là où vivent nos projets et nos idées.">Where our projects and ideas live.</h1>
       <p data-en="This is our shared space — the people, the ventures, and the thinking behind them. Still early days, built and refined as we go." data-fr="Ceci est notre espace commun — les personnes, les projets, et les idées derrière. On en est aux débuts, on construit et on peaufine au fur et à mesure.">This is our shared space — the people, the ventures, and the thinking behind them. Still early days, built and refined as we go.</p>
       <div class="scroll-hint">

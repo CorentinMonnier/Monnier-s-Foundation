@@ -1,0 +1,238 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Work+Sans:wght@400;500;600&display=swap');
+
+:root {
+  --color-bg: #EDEAE3;
+  --color-bg-alt: #E2DED2;
+  --color-ink: #211F1B;
+  --color-ink-soft: #55524A;
+  --color-teal: #1F5C4E;
+  --color-gold: #B98A3E;
+  --font-display: 'Fraunces', serif;
+  --font-body: 'Work Sans', sans-serif;
+  --max-width: 960px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-body);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--color-teal);
+  text-decoration: none;
+}
+
+a:hover, a:focus-visible {
+  text-decoration: underline;
+}
+
+/* ---------- Header ---------- */
+header {
+  border-bottom: 1px solid var(--color-bg-alt);
+}
+
+.header-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.logo {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.3rem;
+  color: var(--color-ink);
+  letter-spacing: 0.02em;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+nav a {
+  color: var(--color-ink-soft);
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+nav a:hover, nav a:focus-visible {
+  color: var(--color-teal);
+}
+
+/* ---------- Hero ---------- */
+.hero {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 5rem 1.5rem 3rem;
+}
+
+.hero-eyebrow {
+  color: var(--color-gold);
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.hero h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  line-height: 1.1;
+  margin: 0.6rem 0 1.2rem;
+}
+
+.hero p {
+  max-width: 42ch;
+  color: var(--color-ink-soft);
+  font-size: 1.1rem;
+}
+
+/* ---------- Founders grid ---------- */
+.founders {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+}
+
+.founders h2 {
+  font-family: var(--font-display);
+  font-size: 1.6rem;
+  margin-bottom: 1.5rem;
+}
+
+.founder-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.founder-card {
+  background: var(--color-bg-alt);
+  border-radius: 4px;
+  padding: 1.8rem;
+  transition: transform 0.15s ease;
+}
+
+.founder-card:hover {
+  transform: translateY(-3px);
+}
+
+.founder-monogram {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: var(--color-teal);
+  color: var(--color-bg);
+  font-family: var(--font-display);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
+.founder-card h3 {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  margin: 0 0 0.2rem;
+}
+
+.founder-card .role {
+  color: var(--color-ink-soft);
+  font-size: 0.9rem;
+  margin-bottom: 0.8rem;
+}
+
+/* ---------- Founder detail page ---------- */
+.founder-hero {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 4rem 1.5rem 2rem;
+}
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  color: var(--color-ink-soft);
+}
+
+.founder-hero .founder-monogram {
+  width: 4.5rem;
+  height: 4.5rem;
+  font-size: 1.6rem;
+}
+
+.founder-hero h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  margin: 1rem 0 0.2rem;
+}
+
+.founder-hero .role {
+  color: var(--color-gold);
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.founder-bio {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem 3rem;
+}
+
+.founder-bio p {
+  max-width: 65ch;
+  color: var(--color-ink-soft);
+  margin-bottom: 1.2rem;
+}
+
+blockquote {
+  border-left: 3px solid var(--color-gold);
+  margin: 2rem 0;
+  padding-left: 1.2rem;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.2rem;
+  max-width: 55ch;
+}
+
+/* ---------- Footer ---------- */
+footer {
+  border-top: 1px solid var(--color-bg-alt);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  color: var(--color-ink-soft);
+  font-size: 0.85rem;
+}
+
+/* ---------- Accessibility ---------- */
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--color-teal);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .founder-card {
+    transition: none;
+  }
+}

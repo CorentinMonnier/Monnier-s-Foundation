@@ -65,7 +65,41 @@ document.addEventListener('DOMContentLoaded', function () {
   }, { threshold: 0.2 });
 
   reveals.forEach(function (el) { revealObserver.observe(el); });
+
+  animateTree();
+  initCursorBlob();
 });
+
+function initCursorBlob() {
+  var home = document.getElementById('home');
+  var blob = document.getElementById('cursorBlob');
+  if (!home || !blob) return;
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+
+  var targetX = 0, targetY = 0, curX = 0, curY = 0;
+  var half = blob.offsetWidth / 2;
+
+  home.addEventListener('mousemove', function (e) {
+    var rect = home.getBoundingClientRect();
+    targetX = e.clientX - rect.left;
+    targetY = e.clientY - rect.top;
+    blob.style.opacity = '1';
+  });
+
+  home.addEventListener('mouseleave', function () {
+    blob.style.opacity = '0';
+  });
+
+  function loop() {
+    curX += (targetX - curX) * 0.14;
+    curY += (targetY - curY) * 0.14;
+    blob.style.transform = 'translate(' + (curX - half) + 'px,' + (curY - half) + 'px)';
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
 
 function animateTree() {
   var svg = document.querySelector('.tree-graphic');

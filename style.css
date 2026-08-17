@@ -173,6 +173,29 @@ section.panel {
   z-index: 2;
 }
 
+/* ---------- Cursor blob ---------- */
+.cursor-blob {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 220px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(199, 154, 86, 0.28) 0%, rgba(29, 44, 82, 0.14) 55%, transparent 75%);
+  filter: blur(18px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  will-change: transform;
+}
+
+@media (max-width: 800px) {
+  .cursor-blob {
+    display: none;
+  }
+}
+
 /* ---------- Hero / Home ---------- */
 #home {
   justify-content: center;
@@ -199,6 +222,13 @@ section.panel {
   margin-bottom: 1rem;
 }
 
+.hero-centered {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .hero h1 {
   font-family: var(--font);
   font-weight: 200;
@@ -206,7 +236,7 @@ section.panel {
   line-height: 1.08;
   letter-spacing: -0.02em;
   margin: 0 0 1.5rem;
-  max-width: 16ch;
+  max-width: 20ch;
 }
 
 .hero p {
@@ -285,18 +315,18 @@ section.panel {
 .tree-graphic {
   position: absolute;
   top: 50%;
-  right: -8%;
-  transform: translateY(-50%);
-  width: min(58vw, 680px);
-  height: min(58vw, 680px);
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: min(75vw, 820px);
+  height: auto;
   z-index: 1;
-  opacity: 0.95;
+  opacity: 0.55;
   pointer-events: none;
 }
 
 .draw-path {
-  stroke-dasharray: 1000;
-  stroke-dashoffset: 1000;
+  stroke-dasharray: 2400;
+  stroke-dashoffset: 2400;
 }
 
 .blossom {
@@ -327,7 +357,7 @@ section.panel {
 @media (max-width: 800px) {
   .tree-graphic {
     opacity: 0.4;
-    right: -25%;
+    width: min(90vw, 500px);
   }
 }
 

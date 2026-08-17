@@ -36,44 +36,24 @@
 
   <!-- ============ HOME ============ -->
   <section class="panel" id="home" data-label-en="Home" data-label-fr="Accueil">
-    <div id="tree3d-container" class="tree3d-container"></div>
+    <div class="cursor-blob" id="cursorBlob"></div>
 
-    <svg id="tree-fallback-svg" class="tree-graphic" style="display:none;" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <defs>
-        <linearGradient id="treeGrad" x1="0" y1="400" x2="300" y2="0" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stop-color="#26314F"/>
-          <stop offset="1" stop-color="#C79A56"/>
-        </linearGradient>
-      </defs>
+    <svg class="tree-graphic" viewBox="0 0 600 420" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <!-- ground line -->
+      <path class="draw-path" data-tier="0" d="M40,360 C150,362 250,358 300,360 C350,358 450,362 560,360" stroke="var(--color-ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.35"/>
       <!-- trunk -->
-      <path class="draw-path" data-tier="0" d="M200 390 C198 340 202 300 197 250" stroke="url(#treeGrad)" stroke-width="1.6" stroke-linecap="round" opacity="0.8"/>
-      <!-- primary branches -->
-      <path class="draw-path" data-tier="1" d="M197 250 C180 220 150 205 118 175" stroke="url(#treeGrad)" stroke-width="1.1" stroke-linecap="round" opacity="0.75"/>
-      <path class="draw-path" data-tier="1" d="M197 250 C210 215 245 195 288 168" stroke="url(#treeGrad)" stroke-width="1.1" stroke-linecap="round" opacity="0.75"/>
-      <path class="draw-path" data-tier="1" d="M197 250 C196 205 200 170 192 128" stroke="url(#treeGrad)" stroke-width="1.1" stroke-linecap="round" opacity="0.75"/>
-      <!-- secondary branches, left -->
-      <path class="draw-path" data-tier="2" d="M118 175 C100 155 90 130 72 100" stroke="url(#treeGrad)" stroke-width="0.75" stroke-linecap="round" opacity="0.6"/>
-      <path class="draw-path" data-tier="2" d="M118 175 C112 148 122 122 112 90" stroke="url(#treeGrad)" stroke-width="0.75" stroke-linecap="round" opacity="0.6"/>
-      <!-- secondary branches, right -->
-      <path class="draw-path" data-tier="2" d="M288 168 C308 148 316 120 336 92" stroke="url(#treeGrad)" stroke-width="0.75" stroke-linecap="round" opacity="0.6"/>
-      <path class="draw-path" data-tier="2" d="M288 168 C294 140 282 116 292 84" stroke="url(#treeGrad)" stroke-width="0.75" stroke-linecap="round" opacity="0.6"/>
-      <!-- secondary branches, center -->
-      <path class="draw-path" data-tier="2" d="M192 128 C178 105 182 80 168 55" stroke="url(#treeGrad)" stroke-width="0.75" stroke-linecap="round" opacity="0.6"/>
-      <path class="draw-path" data-tier="2" d="M192 128 C204 102 200 78 214 52" stroke="url(#treeGrad)" stroke-width="0.75" stroke-linecap="round" opacity="0.6"/>
-      <!-- tertiary twigs -->
-      <path class="draw-path" data-tier="3" d="M72 100 C64 85 68 68 58 52" stroke="url(#treeGrad)" stroke-width="0.5" stroke-linecap="round" opacity="0.45"/>
-      <path class="draw-path" data-tier="3" d="M336 92 C344 76 340 58 350 42" stroke="url(#treeGrad)" stroke-width="0.5" stroke-linecap="round" opacity="0.45"/>
-      <path class="draw-path" data-tier="3" d="M168 55 C160 40 164 24 154 10" stroke="url(#treeGrad)" stroke-width="0.5" stroke-linecap="round" opacity="0.45"/>
-      <!-- blossoms: the "taches" -->
-      <circle class="blossom" cx="112" cy="90" r="3.2" fill="#C79A56"/>
-      <circle class="blossom" cx="292" cy="84" r="2.8" fill="#A1523F"/>
-      <circle class="blossom" cx="214" cy="52" r="3" fill="#C79A56"/>
+      <path class="draw-path" data-tier="0" d="M300,360 C298,328 303,298 297,265" stroke="var(--color-ink)" stroke-width="1.7" stroke-linecap="round" opacity="0.85"/>
+      <!-- canopy outline, one continuous organic line -->
+      <path class="draw-path" data-tier="1" d="M297,265 C260,255 235,240 205,215 C175,190 160,160 165,130 C170,100 195,80 225,78 C215,60 225,40 250,32 C275,24 300,32 310,50 C325,30 355,22 380,32 C405,42 415,65 405,85 C435,80 460,95 465,120 C470,145 455,165 430,172 C445,190 440,215 420,230 C400,245 375,240 360,225 C350,245 325,250 310,235 C305,250 300,260 297,265 Z" stroke="var(--color-ink)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+      <!-- interior veins -->
+      <path class="draw-path" data-tier="2" d="M297,265 C290,235 275,205 255,175" stroke="var(--color-ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
+      <path class="draw-path" data-tier="2" d="M297,265 C300,230 315,195 310,155" stroke="var(--color-ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
+      <path class="draw-path" data-tier="2" d="M297,265 C308,235 330,210 355,180" stroke="var(--color-ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
     </svg>
 
-    <div class="panel-inner hero">
+    <div class="panel-inner hero hero-centered">
       <div class="hero-brand" data-en="Monnier's Foundation" data-fr="Monnier's Foundation">Monnier's Foundation</div>
       <h1 data-en="Where our projects and ideas live." data-fr="Là où vivent nos projets et nos idées.">Where our projects and ideas live.</h1>
-      <p data-en="This is our shared space — the people, the ventures, and the thinking behind them. Still early days, built and refined as we go." data-fr="Ceci est notre espace commun — les personnes, les projets, et les idées derrière. On en est aux débuts, on construit et on peaufine au fur et à mesure.">This is our shared space — the people, the ventures, and the thinking behind them. Still early days, built and refined as we go.</p>
       <div class="scroll-hint">
         <span data-en="Scroll" data-fr="Défiler">Scroll</span>
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -173,8 +153,6 @@
     © 2026 Monnier's Foundation
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-  <script src="tree3d.js"></script>
   <script src="lang.js"></script>
 </body>
 </html>

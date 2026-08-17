@@ -65,8 +65,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }, { threshold: 0.2 });
 
   reveals.forEach(function (el) { revealObserver.observe(el); });
-
-  animateTree();
 });
 
 function animateTree() {

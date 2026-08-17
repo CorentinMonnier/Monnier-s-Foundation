@@ -237,6 +237,51 @@ section.panel {
 }
 
 /* Abstract decorative graphic */
+.tree3d-container {
+  position: absolute;
+  top: 50%;
+  right: -6%;
+  transform: translateY(-50%);
+  width: min(62vw, 720px);
+  height: min(62vw, 720px);
+  z-index: 1;
+}
+
+.tree3d-container canvas {
+  display: block;
+}
+
+.tree-node-label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--color-ink);
+  background: rgba(255, 255, 255, 0.85);
+  padding: 0.2rem 0.6rem;
+  border-radius: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, color 0.2s ease;
+  white-space: nowrap;
+  margin-top: -10px;
+  margin-left: 12px;
+  backdrop-filter: blur(4px);
+}
+
+.tree-node-label.active {
+  font-weight: 600;
+  color: var(--color-gold);
+}
+
+@media (max-width: 800px) {
+  .tree3d-container {
+    opacity: 0.5;
+    right: -20%;
+  }
+}
+
 .tree-graphic {
   position: absolute;
   top: 50%;

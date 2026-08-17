@@ -173,25 +173,29 @@ section.panel {
   z-index: 2;
 }
 
-/* ---------- Cursor blob ---------- */
-.cursor-blob {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 220px;
-  height: 220px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(199, 154, 86, 0.28) 0%, rgba(29, 44, 82, 0.14) 55%, transparent 75%);
-  filter: blur(18px);
+/* ---------- Cursor reveal (site-wide, discreet) ---------- */
+.cursor-reveal {
+  position: fixed;
+  inset: 0;
   pointer-events: none;
-  z-index: 0;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  will-change: transform;
+  z-index: 5;
+  background-image:
+    radial-gradient(circle, rgba(29, 44, 82, 0.5) 1px, transparent 1.4px),
+    radial-gradient(circle, rgba(199, 154, 86, 0.4) 1px, transparent 1.4px);
+  background-size: 28px 28px, 28px 28px;
+  background-position: 0 0, 14px 14px;
+  -webkit-mask-image: radial-gradient(circle 150px at var(--mx, -500px) var(--my, -500px), black 0%, transparent 100%);
+  mask-image: radial-gradient(circle 150px at var(--mx, -500px) var(--my, -500px), black 0%, transparent 100%);
 }
 
 @media (max-width: 800px) {
-  .cursor-blob {
+  .cursor-reveal {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cursor-reveal {
     display: none;
   }
 }
@@ -366,11 +370,7 @@ section.panel {
   padding-top: 8.5rem;
 }
 
-/* ---------- Person layout (intro + projects + contact) ---------- */
-.person-layout {
-  width: 100%;
-}
-
+/* ---------- Person intro (contact section) ---------- */
 .person-intro {
   display: grid;
   grid-template-columns: 280px 1fr;
@@ -386,20 +386,29 @@ section.panel {
   }
 }
 
-/* ---------- Projects ---------- */
+/* ---------- Projects layout (standalone section) ---------- */
+.projects-layout {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 .projects-heading {
   font-weight: 500;
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.1em;
   color: var(--color-ink-faint);
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.8rem;
 }
 
 .project-carousel {
   display: flex;
+  justify-content: center;
   gap: 1.4rem;
   overflow-x: auto;
+  width: 100%;
   padding-bottom: 1rem;
   scroll-snap-type: x proximity;
   cursor: grab;
@@ -475,6 +484,49 @@ section.panel {
 .project-card-arctik {
   background: #0A0A0A;
   border: 1px solid rgba(18, 156, 154, 0.25);
+}
+
+.project-card-large {
+  width: min(92vw, 620px);
+  padding: 3rem;
+}
+
+.project-card-large .project-card-logo {
+  width: 108px;
+  height: 108px;
+  margin-bottom: 1.6rem;
+}
+
+.project-card-large .project-card-tag {
+  font-size: 0.75rem;
+  margin-bottom: 0.9rem;
+}
+
+.project-card-large .project-card-title {
+  font-size: 2.1rem;
+  margin-bottom: 1rem;
+}
+
+.project-card-large .project-card-desc {
+  font-size: 1.05rem;
+  line-height: 1.65;
+  margin-bottom: 1.8rem;
+}
+
+.project-card-large .project-card-link {
+  font-size: 0.95rem;
+  font-weight: 500;
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid currentColor;
+  border-radius: 24px;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.project-card-large.project-card-arctik .project-card-link:hover {
+  background: #17B5B2;
+  color: #0A0A0A;
 }
 
 .project-card-arctik .project-card-tag {

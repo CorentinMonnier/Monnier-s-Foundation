@@ -8,6 +8,8 @@
 </head>
 <body>
 
+  <div class="cursor-reveal" id="cursorReveal"></div>
+
   <header class="site-header">
     <div class="header-inner">
       <div class="brand">
@@ -17,8 +19,8 @@
       <nav>
         <ul>
           <li><a href="#home" class="nav-link" data-section="home" data-en="Home" data-fr="Accueil">Home</a></li>
-          <li><a href="#corentin" class="nav-link" data-section="corentin">Corentin</a></li>
-          <li><a href="#frederic" class="nav-link" data-section="frederic">Frédéric</a></li>
+          <li><a href="#projects" class="nav-link" data-section="projects" data-en="Projects" data-fr="Projets">Projects</a></li>
+          <li><a href="#contact" class="nav-link" data-section="contact" data-en="Contact" data-fr="Contact">Contact</a></li>
           <li class="lang-toggle">
             <button class="lang-btn" data-lang="en">EN</button>
             <button class="lang-btn" data-lang="fr">FR</button>
@@ -30,14 +32,12 @@
 
   <nav class="dot-nav" aria-label="Section navigation">
     <a href="#home" class="dot" data-section="home" aria-label="Home"></a>
-    <a href="#corentin" class="dot" data-section="corentin" aria-label="Corentin"></a>
-    <a href="#frederic" class="dot" data-section="frederic" aria-label="Frédéric"></a>
+    <a href="#projects" class="dot" data-section="projects" aria-label="Projects"></a>
+    <a href="#contact" class="dot" data-section="contact" aria-label="Contact"></a>
   </nav>
 
   <!-- ============ HOME ============ -->
   <section class="panel" id="home" data-label-en="Home" data-label-fr="Accueil">
-    <div class="cursor-blob" id="cursorBlob"></div>
-
     <svg class="tree-graphic" viewBox="0 0 600 420" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
       <!-- ground line -->
       <path class="draw-path" data-tier="0" d="M40,360 C150,362 250,358 300,360 C350,358 450,362 560,360" stroke="var(--color-ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.35"/>
@@ -61,83 +61,38 @@
     </div>
   </section>
 
-  <!-- ============ CORENTIN ============ -->
-  <section class="panel panel-top" id="corentin" data-label-en="Corentin Monnier" data-label-fr="Corentin Monnier">
-    <div class="panel-inner person-layout reveal">
-      <div class="person-intro">
-        <img class="person-photo" src="images/corentin.jpg" alt="Corentin Alexandre Monnier">
+  <!-- ============ PROJECTS ============ -->
+  <section class="panel" id="projects" data-label-en="Projects" data-label-fr="Projets">
+    <div class="panel-inner projects-layout reveal">
+      <h3 class="projects-heading" data-en="Projects" data-fr="Projets">Projects</h3>
 
-        <div>
-          <h2 class="person-name">Corentin Alexandre Monnier</h2>
-          <div class="person-role" data-en="Founder. EHL Student. Innovation-driven." data-fr="Fondateur. Étudiant à l'EHL. Tourné vers l'innovation.">Founder. EHL Student. Innovation-driven.</div>
-
-          <p class="person-summary" data-en="Founder of Arctik Spike and currently studying at EHL, he is passionate about entrepreneurship, innovation, and turning ideas into tangible projects. He enjoys building from the ground up, exploring new opportunities, and learning through hands-on experience." data-fr="Fondateur d'Arctik Spike et actuellement étudiant à l'EHL, il est passionné par l'entrepreneuriat, l'innovation, et la concrétisation d'idées en projets tangibles. Il aime construire depuis zéro, explorer de nouvelles opportunités, et apprendre par la pratique.">Founder of Arctik Spike and currently studying at EHL, he is passionate about entrepreneurship, innovation, and turning ideas into tangible projects. He enjoys building from the ground up, exploring new opportunities, and learning through hands-on experience.</p>
-
-          <p class="person-summary" data-en="Naturally curious and always open to new ideas, he is particularly interested in startups, Venture Capital, and emerging business opportunities. His ambition is to keep learning, creating, and connecting with ambitious people while developing projects that can turn innovative ideas into meaningful ventures." data-fr="Naturellement curieux et toujours ouvert à de nouvelles idées, il s'intéresse particulièrement aux startups, au capital-risque, et aux opportunités d'affaires émergentes. Son ambition est de continuer à apprendre, créer, et se connecter à des personnes ambitieuses, tout en développant des projets capables de transformer des idées innovantes en ventures porteuses de sens.">Naturally curious and always open to new ideas, he is particularly interested in startups, Venture Capital, and emerging business opportunities. His ambition is to keep learning, creating, and connecting with ambitious people while developing projects that can turn innovative ideas into meaningful ventures.</p>
-        </div>
+      <div class="project-carousel">
+        <a class="project-card project-card-arctik project-card-large" href="https://arctikspike.com/" target="_blank" rel="noopener">
+          <img class="project-card-logo" src="images/arctik-spike-logo.jpg" alt="Arctik Spike logo">
+          <div class="project-card-tag" data-en="Sport Brand · Switzerland" data-fr="Marque de sport · Suisse">Sport Brand · Switzerland</div>
+          <h4 class="project-card-title">Arctik Spike</h4>
+          <p class="project-card-desc" data-en="Switzerland's first roundnet (spikeball) brand — a set built to be more durable, better looking, and easier to take anywhere. Corentin leads product development, branding, and go-to-market strategy end to end." data-fr="La première marque suisse de roundnet (spikeball) — un set pensé pour être plus robuste, plus beau et plus nomade. Corentin pilote le développement produit, le branding et la stratégie de lancement de bout en bout.">Switzerland's first roundnet (spikeball) brand — a set built to be more durable, better looking, and easier to take anywhere. Corentin leads product development, branding, and go-to-market strategy end to end.</p>
+          <span class="project-card-link" data-en="Visit arctikspike.com →" data-fr="Visiter arctikspike.com →">Visit arctikspike.com →</span>
+        </a>
       </div>
-
-      <div class="projects-section">
-        <h3 class="projects-heading" data-en="Projects" data-fr="Projets">Projects</h3>
-        <div class="project-carousel">
-
-          <a class="project-card project-card-arctik" href="https://arctikspike.com/" target="_blank" rel="noopener">
-            <img class="project-card-logo" src="images/arctik-spike-logo.jpg" alt="Arctik Spike logo">
-            <div class="project-card-tag" data-en="Sport Brand · Switzerland" data-fr="Marque de sport · Suisse">Sport Brand · Switzerland</div>
-            <h4 class="project-card-title">Arctik Spike</h4>
-            <p class="project-card-desc" data-en="Switzerland's first roundnet (spikeball) brand — a set built to be more durable, better looking, and easier to take anywhere." data-fr="La première marque suisse de roundnet (spikeball) — un set pensé pour être plus robuste, plus beau et plus nomade.">Switzerland's first roundnet (spikeball) brand — a set built to be more durable, better looking, and easier to take anywhere.</p>
-            <span class="project-card-link" data-en="arctikspike.com →" data-fr="arctikspike.com →">arctikspike.com →</span>
-          </a>
-
-        </div>
-      </div>
-
-      <p class="contact-line"><span data-en="Contact:" data-fr="Contact :">Contact:</span> <a href="mailto:corentin.monnier@bluewin.ch">corentin.monnier@bluewin.ch</a></p>
     </div>
   </section>
 
-  <!-- ============ FRÉDÉRIC ============ -->
-  <section class="panel" id="frederic" data-label-en="Frédéric Monnier" data-label-fr="Frédéric Monnier">
-    <div class="panel-inner person-grid reveal">
-      <img class="person-photo" src="images/frederic.jpg" alt="Frédéric Monnier">
+  <!-- ============ CONTACT ============ -->
+  <section class="panel panel-top" id="contact" data-label-en="Corentin Monnier" data-label-fr="Corentin Monnier">
+    <div class="panel-inner person-intro reveal">
+      <img class="person-photo" src="images/corentin.jpg" alt="Corentin Alexandre Monnier">
 
       <div>
-        <h2 class="person-name">Frédéric Monnier</h2>
-        <div class="person-role" data-en="Graduate Trader — Equity Options" data-fr="Graduate Trader — Options sur actions">Graduate Trader — Equity Options</div>
+        <h2 class="person-name">Corentin Alexandre Monnier</h2>
+        <div class="person-role" data-en="Founder. EHL Student. Innovation-driven." data-fr="Fondateur. Étudiant à l'EHL. Tourné vers l'innovation.">Founder. EHL Student. Innovation-driven.</div>
 
-        <p class="person-summary" data-en="Analytical and driven, Frédéric brings a solid grounding in financial markets and quantitative analysis, sharpened by a Master in Finance and hands-on trading experience across European and US desks. Leadership honed as a Sergeant in the Swiss Army carries through into how he manages risk and performs under pressure." data-fr="Analytique et déterminé, Frédéric a une base solide en marchés financiers et en analyse quantitative, affinée par un Master en Finance et une expérience concrète du trading sur les desks européens et américains. Le leadership acquis en tant que sergent dans l'armée suisse se retrouve dans sa gestion du risque et sa capacité à performer sous pression.">Analytical and driven, Frédéric brings a solid grounding in financial markets and quantitative analysis, sharpened by a Master in Finance and hands-on trading experience across European and US desks. Leadership honed as a Sergeant in the Swiss Army carries through into how he manages risk and performs under pressure.</p>
+        <p class="person-summary" data-en="Founder of Arctik Spike and currently studying at EHL, he is passionate about entrepreneurship, innovation, and turning ideas into tangible projects. He enjoys building from the ground up, exploring new opportunities, and learning through hands-on experience." data-fr="Fondateur d'Arctik Spike et actuellement étudiant à l'EHL, il est passionné par l'entrepreneuriat, l'innovation, et la concrétisation d'idées en projets tangibles. Il aime construire depuis zéro, explorer de nouvelles opportunités, et apprendre par la pratique.">Founder of Arctik Spike and currently studying at EHL, he is passionate about entrepreneurship, innovation, and turning ideas into tangible projects. He enjoys building from the ground up, exploring new opportunities, and learning through hands-on experience.</p>
 
-        <div class="facts-row">
-          <div>
-            <div class="fact-label" data-en="Education" data-fr="Formation">Education</div>
-            <div class="fact-value">IE Business School — MSc Finance</div>
-          </div>
-          <div>
-            <div class="fact-label" data-en="Based in" data-fr="Basé à">Based in</div>
-            <div class="fact-value">Geneva, Switzerland</div>
-          </div>
-          <div>
-            <div class="fact-label" data-en="Languages" data-fr="Langues">Languages</div>
-            <div class="fact-value">FR · EN · ES · RU</div>
-          </div>
-        </div>
+        <p class="person-summary" data-en="Naturally curious and always open to new ideas, he is particularly interested in startups, Venture Capital, and emerging business opportunities. His ambition is to keep learning, creating, and connecting with ambitious people while developing projects that can turn innovative ideas into meaningful ventures." data-fr="Naturellement curieux et toujours ouvert à de nouvelles idées, il s'intéresse particulièrement aux startups, au capital-risque, et aux opportunités d'affaires émergentes. Son ambition est de continuer à apprendre, créer, et se connecter à des personnes ambitieuses, tout en développant des projets capables de transformer des idées innovantes en ventures porteuses de sens.">Naturally curious and always open to new ideas, he is particularly interested in startups, Venture Capital, and emerging business opportunities. His ambition is to keep learning, creating, and connecting with ambitious people while developing projects that can turn innovative ideas into meaningful ventures.</p>
 
-        <div class="venture-block">
-          <h3 data-en="Trading" data-fr="Trading">Trading</h3>
-          <p data-en="Graduate Trader at All Options (Amsterdam), trading listed equity options across European and US desks. Designed and coded a Python dividend-prediction model and counterparty-analysis dashboard now used across US trading desks to sharpen pricing accuracy." data-fr="Graduate Trader chez All Options (Amsterdam), négociant des options sur actions cotées sur les desks européens et américains. A conçu et codé un modèle Python de prédiction de dividendes et un tableau de bord d'analyse de contreparties, désormais utilisés sur les desks américains pour affiner la précision du pricing.">Graduate Trader at All Options (Amsterdam), trading listed equity options across European and US desks. Designed and coded a Python dividend-prediction model and counterparty-analysis dashboard now used across US trading desks to sharpen pricing accuracy.</p>
-        </div>
-
-        <div class="venture-block">
-          <h3 data-en="Investment research" data-fr="Recherche en investissement">Investment research</h3>
-          <p data-en="Investment Analyst at Coastline Capital Spain, a long/short hedge fund in its pre-launch phase — macro analysis, valuation, due diligence, and risk management including scenario analysis and stress testing." data-fr="Investment Analyst chez Coastline Capital Spain, un hedge fund long/short en phase de pré-lancement — analyse macro, valorisation, due diligence, et gestion des risques incluant analyse de scénarios et stress tests.">Investment Analyst at Coastline Capital Spain, a long/short hedge fund in its pre-launch phase — macro analysis, valuation, due diligence, and risk management including scenario analysis and stress testing.</p>
-        </div>
-
-        <div class="venture-block">
-          <h3 data-en="Certifications" data-fr="Certifications">Certifications</h3>
-          <p data-en="CFA Institute — Levels 1 &amp; 2, passed on first attempt. Series 57 &amp; SIE (FINRA). Trader License (EUREX). Recipient of the IE Business School Blue Torch Award, 2025." data-fr="CFA Institute — Niveaux 1 et 2, réussis du premier coup. Series 57 &amp; SIE (FINRA). Licence de trader (EUREX). Lauréat du prix Blue Torch d'IE Business School, 2025.">CFA Institute — Levels 1 &amp; 2, passed on first attempt. Series 57 &amp; SIE (FINRA). Trader License (EUREX). Recipient of the IE Business School Blue Torch Award, 2025.</p>
-        </div>
-
-        <p class="contact-line"><span data-en="Contact:" data-fr="Contact :">Contact:</span> <a href="mailto:fredericmonnier01@gmail.com">fredericmonnier01@gmail.com</a></p>
+        <p class="contact-line"><span data-en="Contact:" data-fr="Contact :">Contact:</span> <a href="mailto:corentin.monnier@bluewin.ch">corentin.monnier@bluewin.ch</a></p>
+        <p class="contact-line"><span>LinkedIn:</span> <a href="https://www.linkedin.com/in/corentin-alexandre-monnier-2b15ba343/" target="_blank" rel="noopener">Corentin Alexandre Monnier ↗</a></p>
       </div>
     </div>
   </section>

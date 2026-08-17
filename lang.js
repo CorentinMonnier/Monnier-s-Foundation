@@ -66,9 +66,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
   reveals.forEach(function (el) { revealObserver.observe(el); });
 
-  animateTree();
   initCursorReveal();
   initDragScroll();
+  initCardTilt();
+  initScrollTilt();
 });
 
 function initDragScroll() {
@@ -138,6 +139,62 @@ function initCursorReveal() {
     layer.style.setProperty('--mx', '-500px');
     layer.style.setProperty('--my', '-500px');
   });
+}
+
+/* Effect #1 — card tilt on hover (CSS 3D transform, tracked via JS) */
+function initCardTilt() {
+  var card = document.getElementById('arctikCard');
+  if (!card) return;
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+
+  card.addEventListener('mousemove', function (e) {
+    var rect = card.getBoundingClientRect();
+    var px = (e.clientX - rect.left) / rect.width - 0.5;
+    var py = (e.clientY - rect.top) / rect.height - 0.5;
+    var rotateY = px * 14;
+    var rotateX = -py * 14;
+    card.style.transform = 'rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) translateY(-4px)';
+  });
+
+  card.addEventListener('mouseleave', function () {
+    card.style.transform = 'rotateX(0deg) rotateY(0deg) translateY(0)';
+  });
+}
+
+/* Effect #4 — sections tilt slightly in 3D space as they scroll past
+   (CSS 3D transform driven by scroll position, not WebGL) */
+function initScrollTilt() {
+  var wrapper = document.getElementById('scrollPerspective');
+  if (!wrapper) return;
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+
+  var panels = wrapper.querySelectorAll('section.panel');
+  var ticking = false;
+
+  function update() {
+    var vh = window.innerHeight;
+    panels.forEach(function (panel) {
+      var rect = panel.getBoundingClientRect();
+      var centerOffset = (rect.top + rect.height / 2) - vh / 2;
+      var normalized = centerOffset / vh;
+      var angle = Math.max(-9, Math.min(9, normalized * -11));
+      panel.style.transform = 'rotateX(' + angle + 'deg)';
+    });
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  }, { passive: true });
+
+  update();
 }
 
 function animateTree() {

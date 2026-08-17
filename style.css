@@ -41,6 +41,18 @@ a:hover, a:focus-visible {
   color: var(--color-gold);
 }
 
+/* Perspective lives on this wrapper only — NOT on body/html — so that
+   position:fixed children (particle field, cursor reveal) stay truly
+   fixed to the viewport instead of being reframed by the perspective. */
+.scroll-perspective {
+  perspective: 1600px;
+}
+
+.scroll-perspective section.panel {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
 /* ---------- Header ---------- */
 .site-header {
   position: fixed;
@@ -171,6 +183,24 @@ section.panel {
   width: 100%;
   position: relative;
   z-index: 2;
+}
+
+/* ---------- Particle field (Three.js, site-wide, ambient) ---------- */
+.particle-field {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.particle-field canvas {
+  display: block;
+}
+
+@media (max-width: 800px) {
+  .particle-field {
+    display: none;
+  }
 }
 
 /* ---------- Cursor reveal (site-wide, discreet) ---------- */
@@ -326,6 +356,17 @@ section.panel {
   z-index: 1;
   opacity: 0.55;
   pointer-events: none;
+}
+
+#tree3d-container {
+  aspect-ratio: 600 / 420;
+  pointer-events: auto;
+}
+
+#tree3d-container canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 .draw-path {
@@ -489,6 +530,23 @@ section.panel {
 .project-card-large {
   width: min(92vw, 620px);
   padding: 3rem;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.15s ease-out;
+}
+
+.project-card-orb {
+  position: absolute;
+  top: 1.4rem;
+  right: 1.4rem;
+  width: 64px;
+  height: 64px;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.project-card-orb canvas {
+  display: block;
 }
 
 .project-card-large .project-card-logo {

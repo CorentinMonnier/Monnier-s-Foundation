@@ -8,6 +8,9 @@
 </head>
 <body>
 
+  <!-- ambient WebGL particle field, site-wide, behind everything -->
+  <div class="particle-field" id="particleField"></div>
+
   <div class="cursor-reveal" id="cursorReveal"></div>
 
   <header class="site-header">
@@ -36,71 +39,80 @@
     <a href="#contact" class="dot" data-section="contact" aria-label="Contact"></a>
   </nav>
 
-  <!-- ============ HOME ============ -->
-  <section class="panel" id="home" data-label-en="Home" data-label-fr="Accueil">
-    <svg class="tree-graphic" viewBox="0 0 600 420" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <!-- ground line -->
-      <path class="draw-path" data-tier="0" d="M40,360 C150,362 250,358 300,360 C350,358 450,362 560,360" stroke="var(--color-ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.35"/>
-      <!-- trunk -->
-      <path class="draw-path" data-tier="0" d="M300,360 C298,328 303,298 297,265" stroke="var(--color-ink)" stroke-width="1.7" stroke-linecap="round" opacity="0.85"/>
-      <!-- canopy outline, one continuous organic line -->
-      <path class="draw-path" data-tier="1" d="M297,265 C260,255 235,240 205,215 C175,190 160,160 165,130 C170,100 195,80 225,78 C215,60 225,40 250,32 C275,24 300,32 310,50 C325,30 355,22 380,32 C405,42 415,65 405,85 C435,80 460,95 465,120 C470,145 455,165 430,172 C445,190 440,215 420,230 C400,245 375,240 360,225 C350,245 325,250 310,235 C305,250 300,260 297,265 Z" stroke="var(--color-ink)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
-      <!-- interior veins -->
-      <path class="draw-path" data-tier="2" d="M297,265 C290,235 275,205 255,175" stroke="var(--color-ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
-      <path class="draw-path" data-tier="2" d="M297,265 C300,230 315,195 310,155" stroke="var(--color-ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
-      <path class="draw-path" data-tier="2" d="M297,265 C308,235 330,210 355,180" stroke="var(--color-ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
-    </svg>
+  <!-- wrapper carrying the CSS perspective for the scroll-linked 3D tilt (effect #4) -->
+  <div class="scroll-perspective" id="scrollPerspective">
 
-    <div class="panel-inner hero hero-centered">
-      <div class="hero-brand" data-en="Monnier's Foundation" data-fr="Monnier's Foundation">Monnier's Foundation</div>
-      <h1 data-en="Where our projects and ideas live." data-fr="Là où vivent nos projets et nos idées.">Where our projects and ideas live.</h1>
-      <div class="scroll-hint">
-        <span data-en="Scroll" data-fr="Défiler">Scroll</span>
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <!-- ============ HOME ============ -->
+    <section class="panel" id="home" data-label-en="Home" data-label-fr="Accueil">
+
+      <!-- effect #5: refined 3D tree (Three.js), organic line-art style -->
+      <div id="tree3d-container" class="tree-graphic"></div>
+      <svg id="tree-fallback-svg" class="tree-graphic" style="display:none;" viewBox="0 0 600 420" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path class="draw-path" data-tier="0" d="M40,360 C150,362 250,358 300,360 C350,358 450,362 560,360" stroke="var(--color-ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.35"/>
+        <path class="draw-path" data-tier="0" d="M300,360 C298,328 303,298 297,265" stroke="var(--color-ink)" stroke-width="1.7" stroke-linecap="round" opacity="0.85"/>
+        <path class="draw-path" data-tier="1" d="M297,265 C260,255 235,240 205,215 C175,190 160,160 165,130 C170,100 195,80 225,78 C215,60 225,40 250,32 C275,24 300,32 310,50 C325,30 355,22 380,32 C405,42 415,65 405,85 C435,80 460,95 465,120 C470,145 455,165 430,172 C445,190 440,215 420,230 C400,245 375,240 360,225 C350,245 325,250 310,235 C305,250 300,260 297,265 Z" stroke="var(--color-ink)" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" opacity="0.85"/>
+        <path class="draw-path" data-tier="2" d="M297,265 C290,235 275,205 255,175" stroke="var(--color-ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
+        <path class="draw-path" data-tier="2" d="M297,265 C300,230 315,195 310,155" stroke="var(--color-ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
+        <path class="draw-path" data-tier="2" d="M297,265 C308,235 330,210 355,180" stroke="var(--color-ink)" stroke-width="1.3" stroke-linecap="round" opacity="0.6"/>
+      </svg>
+
+      <div class="panel-inner hero hero-centered">
+        <div class="hero-brand" data-en="Monnier's Foundation" data-fr="Monnier's Foundation">Monnier's Foundation</div>
+        <h1 data-en="Where our projects and ideas live." data-fr="Là où vivent nos projets et nos idées.">Where our projects and ideas live.</h1>
+        <div class="scroll-hint">
+          <span data-en="Scroll" data-fr="Défiler">Scroll</span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ============ PROJECTS ============ -->
-  <section class="panel" id="projects" data-label-en="Projects" data-label-fr="Projets">
-    <div class="panel-inner projects-layout reveal">
-      <h3 class="projects-heading" data-en="Projects" data-fr="Projets">Projects</h3>
+    <!-- ============ PROJECTS ============ -->
+    <section class="panel" id="projects" data-label-en="Projects" data-label-fr="Projets">
+      <div class="panel-inner projects-layout reveal">
+        <h3 class="projects-heading" data-en="Projects" data-fr="Projets">Projects</h3>
 
-      <div class="project-carousel">
-        <a class="project-card project-card-arctik project-card-large" href="https://arctikspike.com/" target="_blank" rel="noopener">
-          <img class="project-card-logo" src="images/arctik-spike-logo.jpg" alt="Arctik Spike logo">
-          <div class="project-card-tag" data-en="Sport Brand · Switzerland" data-fr="Marque de sport · Suisse">Sport Brand · Switzerland</div>
-          <h4 class="project-card-title">Arctik Spike</h4>
-          <p class="project-card-desc" data-en="Switzerland's first roundnet (spikeball) brand — a set built to be more durable, better looking, and easier to take anywhere. Corentin leads product development, branding, and go-to-market strategy end to end." data-fr="La première marque suisse de roundnet (spikeball) — un set pensé pour être plus robuste, plus beau et plus nomade. Corentin pilote le développement produit, le branding et la stratégie de lancement de bout en bout.">Switzerland's first roundnet (spikeball) brand — a set built to be more durable, better looking, and easier to take anywhere. Corentin leads product development, branding, and go-to-market strategy end to end.</p>
-          <span class="project-card-link" data-en="Visit arctikspike.com →" data-fr="Visiter arctikspike.com →">Visit arctikspike.com →</span>
-        </a>
+        <div class="project-carousel">
+          <a class="project-card project-card-arctik project-card-large" id="arctikCard" href="https://arctikspike.com/" target="_blank" rel="noopener">
+            <!-- effect #2: rotating wireframe object (Three.js) -->
+            <div class="project-card-orb" id="cardOrb"></div>
+
+            <img class="project-card-logo" src="images/arctik-spike-logo.jpg" alt="Arctik Spike logo">
+            <div class="project-card-tag" data-en="Sport Brand · Switzerland" data-fr="Marque de sport · Suisse">Sport Brand · Switzerland</div>
+            <h4 class="project-card-title">Arctik Spike</h4>
+            <p class="project-card-desc" data-en="Switzerland's first roundnet (spikeball) brand — a set built to be more durable, better looking, and easier to take anywhere. Corentin leads product development, branding, and go-to-market strategy end to end." data-fr="La première marque suisse de roundnet (spikeball) — un set pensé pour être plus robuste, plus beau et plus nomade. Corentin pilote le développement produit, le branding et la stratégie de lancement de bout en bout.">Switzerland's first roundnet (spikeball) brand — a set built to be more durable, better looking, and easier to take anywhere. Corentin leads product development, branding, and go-to-market strategy end to end.</p>
+            <span class="project-card-link" data-en="Visit arctikspike.com →" data-fr="Visiter arctikspike.com →">Visit arctikspike.com →</span>
+          </a>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ============ CONTACT ============ -->
-  <section class="panel panel-top" id="contact" data-label-en="Corentin Monnier" data-label-fr="Corentin Monnier">
-    <div class="panel-inner person-intro reveal">
-      <img class="person-photo" src="images/corentin.jpg" alt="Corentin Alexandre Monnier">
+    <!-- ============ CONTACT ============ -->
+    <section class="panel panel-top" id="contact" data-label-en="Corentin Monnier" data-label-fr="Corentin Monnier">
+      <div class="panel-inner person-intro reveal">
+        <img class="person-photo" src="images/corentin.jpg" alt="Corentin Alexandre Monnier">
 
-      <div>
-        <h2 class="person-name">Corentin Alexandre Monnier</h2>
-        <div class="person-role" data-en="Founder. EHL Student. Innovation-driven." data-fr="Fondateur. Étudiant à l'EHL. Tourné vers l'innovation.">Founder. EHL Student. Innovation-driven.</div>
+        <div>
+          <h2 class="person-name">Corentin Alexandre Monnier</h2>
+          <div class="person-role" data-en="Founder. EHL Student. Innovation-driven." data-fr="Fondateur. Étudiant à l'EHL. Tourné vers l'innovation.">Founder. EHL Student. Innovation-driven.</div>
 
-        <p class="person-summary" data-en="Founder of Arctik Spike and currently studying at EHL, he is passionate about entrepreneurship, innovation, and turning ideas into tangible projects. He enjoys building from the ground up, exploring new opportunities, and learning through hands-on experience." data-fr="Fondateur d'Arctik Spike et actuellement étudiant à l'EHL, il est passionné par l'entrepreneuriat, l'innovation, et la concrétisation d'idées en projets tangibles. Il aime construire depuis zéro, explorer de nouvelles opportunités, et apprendre par la pratique.">Founder of Arctik Spike and currently studying at EHL, he is passionate about entrepreneurship, innovation, and turning ideas into tangible projects. He enjoys building from the ground up, exploring new opportunities, and learning through hands-on experience.</p>
+          <p class="person-summary" data-en="Founder of Arctik Spike and currently studying at EHL, he is passionate about entrepreneurship, innovation, and turning ideas into tangible projects. He enjoys building from the ground up, exploring new opportunities, and learning through hands-on experience." data-fr="Fondateur d'Arctik Spike et actuellement étudiant à l'EHL, il est passionné par l'entrepreneuriat, l'innovation, et la concrétisation d'idées en projets tangibles. Il aime construire depuis zéro, explorer de nouvelles opportunités, et apprendre par la pratique.">Founder of Arctik Spike and currently studying at EHL, he is passionate about entrepreneurship, innovation, and turning ideas into tangible projects. He enjoys building from the ground up, exploring new opportunities, and learning through hands-on experience.</p>
 
-        <p class="person-summary" data-en="Naturally curious and always open to new ideas, he is particularly interested in startups, Venture Capital, and emerging business opportunities. His ambition is to keep learning, creating, and connecting with ambitious people while developing projects that can turn innovative ideas into meaningful ventures." data-fr="Naturellement curieux et toujours ouvert à de nouvelles idées, il s'intéresse particulièrement aux startups, au capital-risque, et aux opportunités d'affaires émergentes. Son ambition est de continuer à apprendre, créer, et se connecter à des personnes ambitieuses, tout en développant des projets capables de transformer des idées innovantes en ventures porteuses de sens.">Naturally curious and always open to new ideas, he is particularly interested in startups, Venture Capital, and emerging business opportunities. His ambition is to keep learning, creating, and connecting with ambitious people while developing projects that can turn innovative ideas into meaningful ventures.</p>
+          <p class="person-summary" data-en="Naturally curious and always open to new ideas, he is particularly interested in startups, Venture Capital, and emerging business opportunities. His ambition is to keep learning, creating, and connecting with ambitious people while developing projects that can turn innovative ideas into meaningful ventures." data-fr="Naturellement curieux et toujours ouvert à de nouvelles idées, il s'intéresse particulièrement aux startups, au capital-risque, et aux opportunités d'affaires émergentes. Son ambition est de continuer à apprendre, créer, et se connecter à des personnes ambitieuses, tout en développant des projets capables de transformer des idées innovantes en ventures porteuses de sens.">Naturally curious and always open to new ideas, he is particularly interested in startups, Venture Capital, and emerging business opportunities. His ambition is to keep learning, creating, and connecting with ambitious people while developing projects that can turn innovative ideas into meaningful ventures.</p>
 
-        <p class="contact-line"><span data-en="Contact:" data-fr="Contact :">Contact:</span> <a href="mailto:corentin.monnier@bluewin.ch">corentin.monnier@bluewin.ch</a></p>
-        <p class="contact-line"><span>LinkedIn:</span> <a href="https://www.linkedin.com/in/corentin-alexandre-monnier-2b15ba343/" target="_blank" rel="noopener">Corentin Alexandre Monnier ↗</a></p>
+          <p class="contact-line"><span data-en="Contact:" data-fr="Contact :">Contact:</span> <a href="mailto:corentin.monnier@bluewin.ch">corentin.monnier@bluewin.ch</a></p>
+          <p class="contact-line"><span>LinkedIn:</span> <a href="https://www.linkedin.com/in/corentin-alexandre-monnier-2b15ba343/" target="_blank" rel="noopener">Corentin Alexandre Monnier ↗</a></p>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
+
+  </div>
 
   <footer>
     © 2026 Monnier's Foundation
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="webgl-effects.js"></script>
   <script src="lang.js"></script>
 </body>
 </html>

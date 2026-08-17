@@ -68,7 +68,46 @@ document.addEventListener('DOMContentLoaded', function () {
 
   animateTree();
   initCursorBlob();
+  initDragScroll();
 });
+
+function initDragScroll() {
+  document.querySelectorAll('.project-carousel').forEach(function (el) {
+    var isDown = false;
+    var startX = 0;
+    var scrollStart = 0;
+    var moved = false;
+
+    el.addEventListener('mousedown', function (e) {
+      isDown = true;
+      moved = false;
+      el.classList.add('dragging');
+      startX = e.pageX;
+      scrollStart = el.scrollLeft;
+    });
+
+    window.addEventListener('mouseup', function () {
+      isDown = false;
+      el.classList.remove('dragging');
+    });
+
+    el.addEventListener('mousemove', function (e) {
+      if (!isDown) return;
+      e.preventDefault();
+      var dx = e.pageX - startX;
+      if (Math.abs(dx) > 4) moved = true;
+      el.scrollLeft = scrollStart - dx;
+    });
+
+    // prevent link click from firing right after a drag
+    el.addEventListener('click', function (e) {
+      if (moved) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+    }, true);
+  });
+}
 
 function initCursorBlob() {
   var home = document.getElementById('home');

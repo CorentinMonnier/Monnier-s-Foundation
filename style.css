@@ -361,6 +361,142 @@ section.panel {
   }
 }
 
+.panel-top {
+  align-items: flex-start;
+  padding-top: 8.5rem;
+}
+
+/* ---------- Person layout (intro + projects + contact) ---------- */
+.person-layout {
+  width: 100%;
+}
+
+.person-intro {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 3.5rem;
+  align-items: start;
+  margin-bottom: 3.5rem;
+}
+
+@media (max-width: 760px) {
+  .person-intro {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+}
+
+/* ---------- Projects ---------- */
+.projects-heading {
+  font-weight: 500;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-ink-faint);
+  margin-bottom: 1.2rem;
+}
+
+.project-carousel {
+  display: flex;
+  gap: 1.4rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  scroll-snap-type: x proximity;
+  cursor: grab;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line) transparent;
+}
+
+.project-carousel.dragging {
+  cursor: grabbing;
+  scroll-snap-type: none;
+}
+
+.project-carousel::-webkit-scrollbar {
+  height: 6px;
+}
+
+.project-carousel::-webkit-scrollbar-thumb {
+  background: var(--color-line);
+  border-radius: 4px;
+}
+
+.project-card {
+  flex: 0 0 auto;
+  width: 280px;
+  scroll-snap-align: start;
+  border-radius: 10px;
+  padding: 1.6rem;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  user-select: none;
+  transition: transform 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+}
+
+.project-card-logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
+
+.project-card-tag {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.6rem;
+}
+
+.project-card-title {
+  font-weight: 600;
+  font-size: 1.15rem;
+  margin: 0 0 0.6rem;
+}
+
+.project-card-desc {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  margin: 0 0 1.1rem;
+  flex-grow: 1;
+}
+
+.project-card-link {
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Arctik Spike brand card */
+.project-card-arctik {
+  background: #0A0A0A;
+  border: 1px solid rgba(18, 156, 154, 0.25);
+}
+
+.project-card-arctik .project-card-tag {
+  color: #17B5B2;
+}
+
+.project-card-arctik .project-card-title {
+  color: #FFFFFF;
+}
+
+.project-card-arctik .project-card-desc {
+  color: rgba(255, 255, 255, 0.65);
+}
+
+.project-card-arctik .project-card-link {
+  color: #17B5B2;
+}
+
+.project-card-arctik:hover .project-card-link {
+  color: #4FD4D1;
+}
+
 /* ---------- Person panel ---------- */
 .person-grid {
   display: grid;

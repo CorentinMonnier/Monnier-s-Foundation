@@ -11,6 +11,9 @@
   --color-header-bg: rgba(255, 255, 255, 0.72);
   --font: 'Inter', sans-serif;
   --max-width: 1080px;
+  --bg-top: #FFFFFF;
+  --bg-mid: #EEF2F8;
+  --bg-bottom: #E3E9F3;
 }
 
 * {
@@ -27,7 +30,7 @@ body {
   font-family: var(--font);
   font-weight: 300;
   color: var(--color-ink);
-  background: linear-gradient(180deg, #FFFFFF 0%, #EEF2F8 45%, #E3E9F3 100%);
+  background: linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 45%, var(--bg-bottom) 100%);
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
 }
@@ -124,6 +127,22 @@ nav ul {
   color: var(--color-ink-soft);
   position: relative;
   padding-bottom: 2px;
+  display: inline-block;
+}
+
+.nav-link::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -4px;
+  height: 1px;
+  background: var(--color-gold);
+  transition: right 0.25s ease;
+}
+
+.nav-link:hover::before {
+  right: 0;
 }
 
 .nav-link.active {
@@ -230,6 +249,61 @@ section.panel {
   }
 }
 
+/* ---------- Custom cursor ---------- */
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--color-gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 200;
+  opacity: 0;
+  transform: translate(-100px, -100px);
+  transition: width 0.2s ease, height 0.2s ease, background 0.2s ease, opacity 0.3s ease;
+}
+
+.custom-cursor.hovering {
+  width: 38px;
+  height: 38px;
+  background: rgba(199, 154, 86, 0.15);
+}
+
+body.custom-cursor-active {
+  cursor: none;
+}
+
+body.custom-cursor-active a,
+body.custom-cursor-active button {
+  cursor: none;
+}
+
+@media (max-width: 800px) {
+  .custom-cursor {
+    display: none;
+  }
+}
+
+/* ---------- Magnetic elements ---------- */
+.magnetic {
+  transition: transform 0.2s ease-out;
+}
+
+/* ---------- Line-reveal text (word by word on scroll) ---------- */
+.reveal-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.reveal-word.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 /* ---------- Hero / Home ---------- */
 #home {
   justify-content: center;
@@ -263,6 +337,20 @@ section.panel {
   align-items: center;
 }
 
+.lets-talk {
+  font-family: var(--font);
+  font-weight: 200;
+  font-size: clamp(3rem, 10vw, 7rem);
+  letter-spacing: -0.02em;
+  color: var(--color-ink);
+  line-height: 1;
+  transition: color 0.25s ease;
+}
+
+.lets-talk:hover {
+  color: var(--color-gold);
+}
+
 .hero h1 {
   font-family: var(--font);
   font-weight: 200;
@@ -271,6 +359,23 @@ section.panel {
   letter-spacing: -0.02em;
   margin: 0 0 1.5rem;
   max-width: 20ch;
+}
+
+#heroTitle .word {
+  display: inline-block;
+}
+
+#heroTitle .word-animate {
+  opacity: 0;
+  transform: translateY(22px);
+  animation: word-in 0.65s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes word-in {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hero p {
@@ -346,52 +451,26 @@ section.panel {
   }
 }
 
-.tree-graphic {
+.hero-sphere {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: min(75vw, 820px);
-  height: auto;
+  width: min(60vw, 560px);
+  aspect-ratio: 1 / 1;
   z-index: 1;
-  opacity: 0.55;
-  pointer-events: none;
+  pointer-events: auto;
 }
 
-.draw-path {
-  stroke-dasharray: 3600;
-  stroke-dashoffset: 3600;
-}
-
-.blossom {
-  opacity: 0;
-  transition: opacity 0.6s ease;
-  transform-origin: center;
-  transform-box: fill-box;
-}
-
-.blossom.ready {
-  opacity: 0.55;
-  animation: blossom-pulse 4s ease-in-out infinite;
-}
-
-.blossom:nth-of-type(2) {
-  animation-delay: 1.3s;
-}
-
-.blossom:nth-of-type(3) {
-  animation-delay: 2.6s;
-}
-
-@keyframes blossom-pulse {
-  0%, 100% { opacity: 0.55; transform: scale(1); }
-  50% { opacity: 1; transform: scale(1.35); }
+.hero-sphere canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
 }
 
 @media (max-width: 800px) {
-  .tree-graphic {
-    opacity: 0.4;
-    width: min(90vw, 500px);
+  .hero-sphere {
+    width: min(85vw, 380px);
   }
 }
 
@@ -727,6 +806,7 @@ footer {
 
 .dot:hover {
   opacity: 0.8;
+  transform: scale(1.5);
 }
 
 .dot.active {
@@ -773,16 +853,5 @@ a:focus-visible, button:focus-visible {
   }
   .scroll-hint svg {
     animation: none;
-  }
-  .blossom {
-    transition: none;
-  }
-  .blossom.ready {
-    animation: none;
-    opacity: 0.85;
-  }
-  .draw-path {
-    stroke-dasharray: none !important;
-    stroke-dashoffset: 0 !important;
   }
 }

@@ -1,4 +1,132 @@
 /* ============================================================
+   Hero — abstract interactive 3D sphere (Three.js)
+   Wireframe icosahedron that locally deforms toward the mouse,
+   like pressing a finger into an elastic surface.
+   ============================================================ */
+function initHeroSphere() {
+  var container = document.getElementById('sphere3d-container');
+  if (!container || typeof THREE === 'undefined') return;
+
+  function supportsWebGL() {
+    try {
+      var c = document.createElement('canvas');
+      return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
+    } catch (e) {
+      return false;
+    }
+  }
+  if (!supportsWebGL()) {
+    container.style.display = 'none';
+    return;
+  }
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var w = container.clientWidth || 500;
+  var h = container.clientHeight || 500;
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 1000);
+  camera.position.set(0, 0, 420);
+
+  var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(w, h);
+  container.appendChild(renderer.domElement);
+
+  var radius = 130;
+  var geometry = new THREE.IcosahedronGeometry(radius, 3);
+  var posAttr = geometry.attributes.position;
+  var originalPositions = new Float32Array(posAttr.array);
+  var vertexCount = originalPositions.length / 3;
+
+  var material = new THREE.MeshBasicMaterial({
+    color: 0x1D2C52,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.5
+  });
+  var mesh = new THREE.Mesh(geometry, material);
+  scene.add(mesh);
+
+  // subtle non-deforming inner glow for depth
+  var glowGeo = new THREE.SphereGeometry(radius * 0.65, 16, 16);
+  var glowMat = new THREE.MeshBasicMaterial({ color: 0xC79A56, transparent: true, opacity: 0.06 });
+  var glow = new THREE.Mesh(glowGeo, glowMat);
+  scene.add(glow);
+
+  var mouseActive = 0;
+  var targetMouseActive = 0;
+  var mouseNX = 0;
+  var mouseNY = 0;
+  var targetPoint = new THREE.Vector3(0, 0, radius);
+
+  container.addEventListener('mousemove', function (e) {
+    var rect = container.getBoundingClientRect();
+    mouseNX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    mouseNY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+    targetMouseActive = 1;
+  });
+
+  container.addEventListener('mouseleave', function () {
+    targetMouseActive = 0;
+  });
+
+  window.addEventListener('resize', function () {
+    var w2 = container.clientWidth, h2 = container.clientHeight;
+    if (!w2 || !h2) return;
+    camera.aspect = w2 / h2;
+    camera.updateProjectionMatrix();
+    renderer.setSize(w2, h2);
+  });
+
+  var influenceRadius = radius * 1.1;
+  var maxBump = 26;
+  var idleAmplitude = reduceMotion ? 0 : 3;
+  var clock = new THREE.Clock();
+  var tmpOrig = new THREE.Vector3();
+  var tmpNormal = new THREE.Vector3();
+
+  function animate() {
+    requestAnimationFrame(animate);
+    var t = clock.getElapsedTime();
+
+    mouseActive += (targetMouseActive - mouseActive) * 0.08;
+    targetPoint.set(mouseNX, -mouseNY, 0.6).normalize().multiplyScalar(radius);
+
+    var positions = posAttr.array;
+    for (var i = 0; i < vertexCount; i++) {
+      var ix = i * 3;
+      tmpOrig.set(originalPositions[ix], originalPositions[ix + 1], originalPositions[ix + 2]);
+      tmpNormal.copy(tmpOrig).normalize();
+
+      var dist = tmpOrig.distanceTo(targetPoint);
+      var falloff = Math.max(0, 1 - dist / influenceRadius);
+      falloff = falloff * falloff;
+      var bump = falloff * maxBump * mouseActive;
+
+      var idle = reduceMotion ? 0 :
+        Math.sin(t * 0.6 + tmpOrig.x * 0.04 + tmpOrig.y * 0.04 + tmpOrig.z * 0.04) * idleAmplitude;
+
+      var total = bump + idle;
+      positions[ix] = tmpOrig.x + tmpNormal.x * total;
+      positions[ix + 1] = tmpOrig.y + tmpNormal.y * total;
+      positions[ix + 2] = tmpOrig.z + tmpNormal.z * total;
+    }
+    posAttr.needsUpdate = true;
+
+    if (!reduceMotion) {
+      mesh.rotation.y += 0.0018;
+      mesh.rotation.x += 0.0006;
+      glow.rotation.copy(mesh.rotation);
+    }
+
+    renderer.render(scene, camera);
+  }
+  animate();
+}
+
+/* ============================================================
    Effect #3 — Ambient particle field, site-wide background
    ============================================================ */
 function initParticleField() {
@@ -80,146 +208,6 @@ function initParticleField() {
 }
 
 /* ============================================================
-   Effect #5 — Refined 3D tree (Three.js), organic line-art
-   Falls back to the animated 2D SVG if WebGL is unavailable.
-   ============================================================ */
-function initHeroTree3D() {
-  var container = document.getElementById('tree3d-container');
-  if (!container) return;
-
-  function supportsWebGL() {
-    try {
-      var c = document.createElement('canvas');
-      return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
-    } catch (e) {
-      return false;
-    }
-  }
-
-  if (typeof THREE === 'undefined' || !supportsWebGL()) {
-    container.style.display = 'none';
-    var fb = document.getElementById('tree-fallback-svg');
-    if (fb) {
-      fb.style.display = 'block';
-      if (typeof animateTree === 'function') animateTree();
-    }
-    return;
-  }
-
-  var w = container.clientWidth || 600;
-  var h = container.clientHeight || 600;
-
-  var scene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(40, w / h, 0.1, 1000);
-  camera.position.set(0, 10, 340);
-  camera.lookAt(0, 10, 0);
-
-  var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.setSize(w, h);
-  container.appendChild(renderer.domElement);
-
-  var treeGroup = new THREE.Group();
-  scene.add(treeGroup);
-
-  // convert a 2D-ish [svgX, svgY, z] anchor point to a 3D vector,
-  // centered and scaled from the original SVG viewBox (600x420)
-  function toVec(pt) {
-    return new THREE.Vector3((pt[0] - 300) * 0.85, -(pt[1] - 210) * 0.85, pt[2] || 0);
-  }
-
-  function growGroup(group, tier, delay) {
-    var duration = 900 - tier * 100;
-    var start = performance.now() + delay;
-    function step(now) {
-      var elapsed = now - start;
-      if (elapsed < 0) {
-        requestAnimationFrame(step);
-        return;
-      }
-      var t = Math.min(elapsed / duration, 1);
-      var eased = 1 - Math.pow(1 - t, 3);
-      var s = Math.max(eased, 0.001);
-      group.scale.set(s, s, s);
-      if (t < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-
-  function makeTube(rawPoints, radius, color, tier, delay) {
-    var points3d = rawPoints.map(toVec);
-    var pivotAt = points3d[0];
-    var pivot = new THREE.Group();
-    pivot.position.copy(pivotAt);
-    pivot.scale.set(0.001, 0.001, 0.001);
-
-    var localPts = points3d.map(function (p) { return p.clone().sub(pivotAt); });
-    var curve = new THREE.CatmullRomCurve3(localPts, false);
-    var segments = Math.max(localPts.length * 10, 40);
-    var geo = new THREE.TubeGeometry(curve, segments, radius, 6, false);
-    var mat = new THREE.MeshBasicMaterial({ color: color, transparent: true, opacity: 0.85 });
-    var mesh = new THREE.Mesh(geo, mat);
-    pivot.add(mesh);
-    treeGroup.add(pivot);
-
-    growGroup(pivot, tier, delay);
-  }
-
-  var navy = 0x1D2C52;
-  var gold = 0xC79A56;
-
-  // trunk
-  makeTube([[300, 360, 0], [298, 328, 3], [303, 298, -2], [297, 265, 4]], 2.2, navy, 0, 0);
-
-  // canopy — one continuous closed loop through the same anchor points as the 2D tree
-  makeTube([
-    [297, 265, 4], [205, 215, -10], [165, 130, 12], [225, 78, -8], [250, 32, 10],
-    [310, 50, -6], [380, 32, 14], [405, 85, -10], [465, 120, 8], [430, 172, -12],
-    [420, 230, 10], [360, 225, -6], [310, 235, 8], [297, 265, 4]
-  ], 1.5, gold, 1, 300);
-
-  // interior veins
-  makeTube([[297, 265, 4], [275, 205, -4], [255, 175, 6]], 1.0, gold, 2, 700);
-  makeTube([[297, 265, 4], [300, 230, 2], [310, 155, -4]], 1.0, gold, 2, 750);
-  makeTube([[297, 265, 4], [308, 235, -2], [355, 180, 6]], 1.0, gold, 2, 800);
-
-  // mouse parallax
-  var targetRotX = 0, targetRotY = 0, curRotX = 0, curRotY = 0;
-
-  container.addEventListener('mousemove', function (e) {
-    var rect = container.getBoundingClientRect();
-    var x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    var y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-    targetRotY = x * 0.3;
-    targetRotX = -y * 0.15;
-  });
-
-  container.addEventListener('mouseleave', function () {
-    targetRotX = 0;
-    targetRotY = 0;
-  });
-
-  window.addEventListener('resize', function () {
-    var w2 = container.clientWidth, h2 = container.clientHeight;
-    if (!w2 || !h2) return;
-    camera.aspect = w2 / h2;
-    camera.updateProjectionMatrix();
-    renderer.setSize(w2, h2);
-  });
-
-  var clock = new THREE.Clock();
-  function animate() {
-    requestAnimationFrame(animate);
-    curRotX += (targetRotX - curRotX) * 0.06;
-    curRotY += (targetRotY - curRotY) * 0.06;
-    treeGroup.rotation.x = curRotX;
-    treeGroup.rotation.y = curRotY + Math.sin(clock.getElapsedTime() * 0.15) * 0.04;
-    renderer.render(scene, camera);
-  }
-  animate();
-}
-
-/* ============================================================
    Effect #2 — Rotating wireframe object on the Arctik Spike card
    ============================================================ */
 function initCardOrb() {
@@ -253,7 +241,7 @@ function initCardOrb() {
 }
 
 document.addEventListener('DOMContentLoaded', function () {
+  initHeroSphere();
   initParticleField();
-  initHeroTree3D();
   initCardOrb();
 });

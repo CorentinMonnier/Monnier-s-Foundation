@@ -1,3 +1,8 @@
+var currentSection = 'home';
+var currentLang = 'en';
+var lineRevealInitialized = false;
+
+/* ---------- Translation ---------- */
 function setLang(lang) {
   document.querySelectorAll('[data-en]').forEach(function (el) {
     el.textContent = el.getAttribute('data-' + lang);
@@ -8,10 +13,18 @@ function setLang(lang) {
   });
   localStorage.setItem('site-lang', lang);
   updateSectionLabel(currentSection, lang);
-}
 
-var currentSection = 'home';
-var currentLang = 'en';
+  // line-reveal paragraphs got their words wrapped in spans for the
+  // scroll animation; re-wrap them with the new language's text,
+  // but only after the very first pass (handled by initLineReveal),
+  // otherwise this would skip the on-scroll animation entirely.
+  if (lineRevealInitialized) {
+    document.querySelectorAll('.line-reveal').forEach(function (el) {
+      wrapWords(el);
+      el.querySelectorAll('.reveal-word').forEach(function (w) { w.classList.add('visible'); });
+    });
+  }
+}
 
 function updateSectionLabel(sectionId, lang) {
   var section = document.getElementById(sectionId);
@@ -22,14 +35,40 @@ function updateSectionLabel(sectionId, lang) {
   label.classList.toggle('visible', sectionId !== 'home');
 }
 
+/* ---------- Hero title: types in word by word on first load ---------- */
+var heroTitleText = {
+  en: 'Where our projects and ideas live.',
+  fr: 'Là où vivent nos projets et nos idées.'
+};
+
+function renderHeroTitle(lang, animate) {
+  var el = document.getElementById('heroTitle');
+  if (!el) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var words = heroTitleText[lang].split(' ');
+  el.innerHTML = '';
+  words.forEach(function (word, i) {
+    var span = document.createElement('span');
+    span.className = 'word';
+    span.textContent = word + (i < words.length - 1 ? '\u00A0' : '');
+    if (animate && !reduceMotion) {
+      span.classList.add('word-animate');
+      span.style.animationDelay = (i * 0.07) + 's';
+    }
+    el.appendChild(span);
+  });
+}
+
 document.addEventListener('DOMContentLoaded', function () {
   currentLang = localStorage.getItem('site-lang') || 'en';
   setLang(currentLang);
+  renderHeroTitle(currentLang, true);
 
   document.querySelectorAll('.lang-btn').forEach(function (btn) {
     btn.addEventListener('click', function () {
       currentLang = btn.dataset.lang;
       setLang(currentLang);
+      renderHeroTitle(currentLang, false);
     });
   });
 
@@ -70,8 +109,13 @@ document.addEventListener('DOMContentLoaded', function () {
   initDragScroll();
   initCardTilt();
   initScrollTilt();
+  initScrollGradient();
+  initLineReveal();
+  initCustomCursor();
+  initMagnetic();
 });
 
+/* ---------- Drag-to-scroll project carousel ---------- */
 function initDragScroll() {
   document.querySelectorAll('.project-carousel').forEach(function (el) {
     var isDown = false;
@@ -100,7 +144,6 @@ function initDragScroll() {
       el.scrollLeft = scrollStart - dx;
     });
 
-    // prevent link click from firing right after a drag
     el.addEventListener('click', function (e) {
       if (moved) {
         e.preventDefault();
@@ -110,6 +153,7 @@ function initDragScroll() {
   });
 }
 
+/* ---------- Cursor reveal (dotted grid uncovered near the cursor) ---------- */
 function initCursorReveal() {
   var layer = document.getElementById('cursorReveal');
   if (!layer) return;
@@ -141,7 +185,7 @@ function initCursorReveal() {
   });
 }
 
-/* Effect #1 — card tilt on hover (CSS 3D transform, tracked via JS) */
+/* ---------- Card tilt on hover (CSS 3D transform, tracked via JS) ---------- */
 function initCardTilt() {
   var card = document.getElementById('arctikCard');
   if (!card) return;
@@ -163,8 +207,74 @@ function initCardTilt() {
   });
 }
 
-/* Effect #4 — sections tilt slightly in 3D space as they scroll past
-   (CSS 3D transform driven by scroll position, not WebGL) */
+/* ---------- Scroll gradient: background blends between a palette
+   per section as you scroll, instead of snapping ---------- */
+function initScrollGradient() {
+  var wrapper = document.getElementById('scrollPerspective');
+  if (!wrapper) return;
+
+  var sections = wrapper.querySelectorAll('section.panel');
+  var root = document.documentElement;
+  var ticking = false;
+
+  var palettes = {
+    home: { top: [255, 255, 255], mid: [238, 242, 248], bottom: [227, 233, 243] },
+    projects: { top: [247, 248, 250], mid: [222, 229, 242], bottom: [199, 209, 232] },
+    about: { top: [255, 255, 255], mid: [242, 236, 224], bottom: [237, 224, 192] },
+    contact: { top: [245, 246, 250], mid: [203, 213, 232], bottom: [157, 175, 206] }
+  };
+
+  function toRgb(c) {
+    return 'rgb(' + Math.round(c[0]) + ',' + Math.round(c[1]) + ',' + Math.round(c[2]) + ')';
+  }
+
+  function update() {
+    var vh = window.innerHeight;
+    var weights = [];
+    var total = 0;
+
+    sections.forEach(function (sec) {
+      var rect = sec.getBoundingClientRect();
+      var center = rect.top + rect.height / 2;
+      var dist = Math.abs(center - vh / 2);
+      var weight = Math.max(0, 1 - dist / vh);
+      weights.push({ id: sec.id, w: weight });
+      total += weight;
+    });
+
+    if (total <= 0) {
+      ticking = false;
+      return;
+    }
+
+    var top = [0, 0, 0], mid = [0, 0, 0], bottom = [0, 0, 0];
+    weights.forEach(function (item) {
+      var p = palettes[item.id];
+      if (!p) return;
+      var frac = item.w / total;
+      top[0] += p.top[0] * frac; top[1] += p.top[1] * frac; top[2] += p.top[2] * frac;
+      mid[0] += p.mid[0] * frac; mid[1] += p.mid[1] * frac; mid[2] += p.mid[2] * frac;
+      bottom[0] += p.bottom[0] * frac; bottom[1] += p.bottom[1] * frac; bottom[2] += p.bottom[2] * frac;
+    });
+
+    root.style.setProperty('--bg-top', toRgb(top));
+    root.style.setProperty('--bg-mid', toRgb(mid));
+    root.style.setProperty('--bg-bottom', toRgb(bottom));
+    ticking = false;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(update);
+    }
+  }, { passive: true });
+
+  update();
+}
+
+/* ---------- Sections tilt slightly in 3D space as they scroll past
+   (CSS 3D transform driven by scroll position, not WebGL) ---------- */
 function initScrollTilt() {
   var wrapper = document.getElementById('scrollPerspective');
   if (!wrapper) return;
@@ -197,41 +307,101 @@ function initScrollTilt() {
   update();
 }
 
-function animateTree() {
-  var svg = document.querySelector('.tree-graphic');
-  if (!svg) return;
+/* ---------- Text that reveals word by word as you scroll to it ---------- */
+function wrapWords(el) {
+  var text = el.textContent.trim();
+  var words = text.split(/\s+/);
+  el.innerHTML = '';
+  words.forEach(function (w, i) {
+    var span = document.createElement('span');
+    span.className = 'reveal-word';
+    span.textContent = w + (i < words.length - 1 ? ' ' : '');
+    span.style.transitionDelay = (i * 0.02) + 's';
+    el.appendChild(span);
+  });
+}
+
+function initLineReveal() {
+  var targets = document.querySelectorAll('.line-reveal');
+  if (!targets.length) return;
 
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var paths = svg.querySelectorAll('.draw-path');
-  var blossoms = svg.querySelectorAll('.blossom');
+  targets.forEach(function (el) { wrapWords(el); });
 
   if (reduceMotion) {
-    blossoms.forEach(function (b) { b.classList.add('ready'); });
+    document.querySelectorAll('.reveal-word').forEach(function (w) { w.classList.add('visible'); });
+    lineRevealInitialized = true;
     return;
   }
 
-  var maxFinish = 0;
-
-  paths.forEach(function (path) {
-    var tier = parseInt(path.dataset.tier || '0', 10);
-    var length = path.getTotalLength();
-    var duration = 900 - tier * 130;
-    var delay = tier * 340;
-
-    path.style.strokeDasharray = length;
-    path.style.strokeDashoffset = length;
-    // force reflow so the transition below actually animates
-    path.getBoundingClientRect();
-    path.style.transition = 'stroke-dashoffset ' + duration + 'ms ease-out ' + delay + 'ms';
-
-    requestAnimationFrame(function () {
-      path.style.strokeDashoffset = '0';
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.reveal-word').forEach(function (w) {
+          w.classList.add('visible');
+        });
+        observer.unobserve(entry.target);
+      }
     });
+  }, { threshold: 0.25 });
 
-    maxFinish = Math.max(maxFinish, delay + duration);
+  targets.forEach(function (el) { observer.observe(el); });
+  lineRevealInitialized = true;
+}
+
+/* ---------- Custom cursor: dot that grows over links/buttons ---------- */
+function initCustomCursor() {
+  var cursor = document.getElementById('customCursor');
+  if (!cursor) return;
+
+  var isSmall = window.matchMedia('(max-width: 800px)').matches;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (isSmall || reduceMotion) return;
+
+  document.body.classList.add('custom-cursor-active');
+
+  var x = 0, y = 0, curX = 0, curY = 0;
+
+  document.addEventListener('mousemove', function (e) {
+    x = e.clientX;
+    y = e.clientY;
+    cursor.style.opacity = '1';
   });
 
-  setTimeout(function () {
-    blossoms.forEach(function (b) { b.classList.add('ready'); });
-  }, maxFinish + 150);
+  document.addEventListener('mouseleave', function () {
+    cursor.style.opacity = '0';
+  });
+
+  function loop() {
+    curX += (x - curX) * 0.25;
+    curY += (y - curY) * 0.25;
+    cursor.style.transform = 'translate(' + curX + 'px,' + curY + 'px) translate(-50%,-50%)';
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  document.querySelectorAll('a, button, .project-carousel').forEach(function (el) {
+    el.addEventListener('mouseenter', function () { cursor.classList.add('hovering'); });
+    el.addEventListener('mouseleave', function () { cursor.classList.remove('hovering'); });
+  });
+}
+
+/* ---------- Magnetic buttons: pull slightly toward the cursor ---------- */
+function initMagnetic() {
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var isSmall = window.matchMedia('(max-width: 800px)').matches;
+  if (reduceMotion || isSmall) return;
+
+  document.querySelectorAll('.magnetic').forEach(function (el) {
+    el.addEventListener('mousemove', function (e) {
+      var rect = el.getBoundingClientRect();
+      var x = e.clientX - rect.left - rect.width / 2;
+      var y = e.clientY - rect.top - rect.height / 2;
+      el.style.transform = 'translate(' + (x * 0.3) + 'px,' + (y * 0.3) + 'px)';
+    });
+
+    el.addEventListener('mouseleave', function () {
+      el.style.transform = 'translate(0,0)';
+    });
+  });
 }

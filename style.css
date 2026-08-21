@@ -358,20 +358,9 @@ section.panel {
   pointer-events: none;
 }
 
-#tree3d-container {
-  aspect-ratio: 600 / 420;
-  pointer-events: auto;
-}
-
-#tree3d-container canvas {
-  display: block;
-  width: 100% !important;
-  height: 100% !important;
-}
-
 .draw-path {
-  stroke-dasharray: 2400;
-  stroke-dashoffset: 2400;
+  stroke-dasharray: 3600;
+  stroke-dashoffset: 3600;
 }
 
 .blossom {

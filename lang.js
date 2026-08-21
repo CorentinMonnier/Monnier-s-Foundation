@@ -50,12 +50,15 @@ function renderHeroTitle(lang, animate) {
   words.forEach(function (word, i) {
     var span = document.createElement('span');
     span.className = 'word';
-    span.textContent = word + (i < words.length - 1 ? '\u00A0' : '');
+    span.textContent = word;
     if (animate && !reduceMotion) {
       span.classList.add('word-animate');
       span.style.animationDelay = (i * 0.07) + 's';
     }
     el.appendChild(span);
+    if (i < words.length - 1) {
+      el.appendChild(document.createTextNode('\u00A0'));
+    }
   });
 }
 
@@ -111,7 +114,6 @@ document.addEventListener('DOMContentLoaded', function () {
   initScrollTilt();
   initScrollGradient();
   initLineReveal();
-  initCustomCursor();
   initMagnetic();
   initPreloader();
   initMobileMenu();
@@ -319,9 +321,12 @@ function wrapWords(el) {
   words.forEach(function (w, i) {
     var span = document.createElement('span');
     span.className = 'reveal-word';
-    span.textContent = w + (i < words.length - 1 ? ' ' : '');
+    span.textContent = w;
     span.style.transitionDelay = (i * 0.02) + 's';
     el.appendChild(span);
+    if (i < words.length - 1) {
+      el.appendChild(document.createTextNode(' '));
+    }
   });
 }
 
@@ -351,43 +356,6 @@ function initLineReveal() {
 
   targets.forEach(function (el) { observer.observe(el); });
   lineRevealInitialized = true;
-}
-
-/* ---------- Custom cursor: dot that grows over links/buttons ---------- */
-function initCustomCursor() {
-  var cursor = document.getElementById('customCursor');
-  if (!cursor) return;
-
-  var isSmall = window.matchMedia('(max-width: 800px)').matches;
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (isSmall || reduceMotion) return;
-
-  document.body.classList.add('custom-cursor-active');
-
-  var x = 0, y = 0, curX = 0, curY = 0;
-
-  document.addEventListener('mousemove', function (e) {
-    x = e.clientX;
-    y = e.clientY;
-    cursor.style.opacity = '1';
-  });
-
-  document.addEventListener('mouseleave', function () {
-    cursor.style.opacity = '0';
-  });
-
-  function loop() {
-    curX += (x - curX) * 0.25;
-    curY += (y - curY) * 0.25;
-    cursor.style.transform = 'translate(' + curX + 'px,' + curY + 'px) translate(-50%,-50%)';
-    requestAnimationFrame(loop);
-  }
-  loop();
-
-  document.querySelectorAll('a, button, .project-carousel').forEach(function (el) {
-    el.addEventListener('mouseenter', function () { cursor.classList.add('hovering'); });
-    el.addEventListener('mouseleave', function () { cursor.classList.remove('hovering'); });
-  });
 }
 
 /* ---------- Shared toast helper ---------- */

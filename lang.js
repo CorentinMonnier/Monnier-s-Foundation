@@ -113,6 +113,10 @@ document.addEventListener('DOMContentLoaded', function () {
   initLineReveal();
   initCustomCursor();
   initMagnetic();
+  initPreloader();
+  initMobileMenu();
+  initCopyEmail();
+  initLiveClock();
 });
 
 /* ---------- Drag-to-scroll project carousel ---------- */
@@ -384,6 +388,121 @@ function initCustomCursor() {
     el.addEventListener('mouseenter', function () { cursor.classList.add('hovering'); });
     el.addEventListener('mouseleave', function () { cursor.classList.remove('hovering'); });
   });
+}
+
+/* ---------- Shared toast helper ---------- */
+function showToast(message) {
+  var toast = document.getElementById('toast');
+  if (!toast) return;
+  toast.textContent = message;
+  toast.classList.add('visible');
+  clearTimeout(window._toastTimeout);
+  window._toastTimeout = setTimeout(function () {
+    toast.classList.remove('visible');
+  }, 2500);
+}
+
+/* ---------- Preloader ---------- */
+function initPreloader() {
+  var pre = document.getElementById('preloader');
+  var fill = document.getElementById('preloaderFill');
+  if (!pre) return;
+
+  var start = performance.now();
+  var minDisplay = 700;
+  var done = false;
+
+  function tick() {
+    if (done) return;
+    var elapsed = performance.now() - start;
+    var pct = Math.min(90, (elapsed / 1200) * 90);
+    if (fill) fill.style.width = pct + '%';
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+
+  function finish() {
+    if (done) return;
+    done = true;
+    var elapsed = performance.now() - start;
+    var wait = Math.max(0, minDisplay - elapsed);
+    setTimeout(function () {
+      if (fill) fill.style.width = '100%';
+      setTimeout(function () {
+        pre.classList.add('hidden');
+      }, 200);
+    }, wait);
+  }
+
+  if (document.readyState === 'complete') {
+    finish();
+  } else {
+    window.addEventListener('load', finish);
+  }
+  setTimeout(finish, 3500);
+}
+
+/* ---------- Mobile hamburger menu ---------- */
+function initMobileMenu() {
+  var toggle = document.getElementById('mobileMenuToggle');
+  var navList = document.getElementById('navList');
+  if (!toggle || !navList) return;
+
+  toggle.addEventListener('click', function () {
+    var isOpen = navList.classList.toggle('mobile-open');
+    toggle.classList.toggle('open', isOpen);
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+
+  navList.querySelectorAll('a').forEach(function (link) {
+    link.addEventListener('click', function () {
+      navList.classList.remove('mobile-open');
+      toggle.classList.remove('open');
+      toggle.setAttribute('aria-expanded', 'false');
+    });
+  });
+}
+
+/* ---------- Copy email button ---------- */
+function initCopyEmail() {
+  var btn = document.getElementById('copyEmailBtn');
+  if (!btn) return;
+
+  var email = 'corentin.monnier@bluewin.ch';
+
+  btn.addEventListener('click', function (e) {
+    e.preventDefault();
+    var msg = currentLang === 'fr' ? 'Email copié !' : 'Email copied!';
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(email).then(function () {
+        showToast(msg);
+      }).catch(function () {
+        showToast(email);
+      });
+    } else {
+      showToast(email);
+    }
+  });
+}
+
+/* ---------- Live clock (Geneva time) ---------- */
+function initLiveClock() {
+  var el = document.getElementById('liveClock');
+  if (!el) return;
+
+  function update() {
+    var now = new Date();
+    var formatter = new Intl.DateTimeFormat('en-GB', {
+      timeZone: 'Europe/Zurich',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+    el.textContent = 'Geneva, ' + formatter.format(now);
+  }
+
+  update();
+  setInterval(update, 30000);
 }
 
 /* ---------- Magnetic buttons: pull slightly toward the cursor ---------- */

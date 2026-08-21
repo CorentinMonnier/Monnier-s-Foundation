@@ -4,9 +4,33 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Monnier's Foundation</title>
+  <meta name="description" content="Monnier's Foundation — where our projects and ideas live.">
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Monnier's Foundation">
+  <meta property="og:description" content="Where our projects and ideas live.">
+  <meta property="og:image" content="og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Monnier's Foundation">
+  <meta name="twitter:description" content="Where our projects and ideas live.">
+  <meta name="twitter:image" content="og-image.png">
+
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-mark">Monnier's Foundation</div>
+      <div class="preloader-bar"><div class="preloader-bar-fill" id="preloaderFill"></div></div>
+    </div>
+  </div>
+
+  <!-- toast for copy-email / easter egg -->
+  <div class="toast" id="toast"></div>
 
   <!-- ambient WebGL particle field, site-wide, behind everything -->
   <div class="particle-field" id="particleField"></div>
@@ -23,7 +47,7 @@
         <span class="brand-current" id="sectionLabel"></span>
       </div>
       <nav>
-        <ul>
+        <ul id="navList">
           <li><a href="#home" class="nav-link magnetic" data-section="home" data-en="Home" data-fr="Accueil">Home</a></li>
           <li><a href="#projects" class="nav-link magnetic" data-section="projects" data-en="Projects" data-fr="Projets">Projects</a></li>
           <li><a href="#about" class="nav-link magnetic" data-section="about" data-en="About" data-fr="À propos">About</a></li>
@@ -34,6 +58,10 @@
           </li>
         </ul>
       </nav>
+
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
     </div>
   </header>
 
@@ -127,13 +155,14 @@
       <div class="panel-inner hero hero-centered">
         <div class="hero-eyebrow" data-en="Get in touch" data-fr="Prenons contact">Get in touch</div>
         <a class="lets-talk magnetic" href="mailto:corentin.monnier@bluewin.ch" data-en="Let's talk" data-fr="Discutons">Let's talk</a>
+        <button class="copy-email-btn magnetic" id="copyEmailBtn" data-en="or copy email" data-fr="ou copier l'email">or copy email</button>
       </div>
     </section>
 
   </div>
 
   <footer>
-    © 2026 Monnier's Foundation
+    © 2026 Monnier's Foundation — <span id="liveClock"></span>
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>

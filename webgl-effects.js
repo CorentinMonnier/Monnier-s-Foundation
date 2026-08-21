@@ -72,6 +72,27 @@ function initHeroSphere() {
     targetMouseActive = 0;
   });
 
+  // Easter egg: click the sphere 5 times within 3 seconds
+  var clickTimes = [];
+  var eggBoost = 0;
+
+  container.addEventListener('click', function () {
+    var now = performance.now();
+    clickTimes.push(now);
+    clickTimes = clickTimes.filter(function (t) { return now - t < 3000; });
+    if (clickTimes.length >= 5) {
+      clickTimes = [];
+      eggBoost = 1;
+      setTimeout(function () { eggBoost = 0; }, 2200);
+      if (typeof showToast === 'function') {
+        var msg = (window.currentLang === 'fr')
+          ? "✨ Tu as trouvé le secret de la sphère."
+          : "✨ You found the sphere's secret.";
+        showToast(msg);
+      }
+    }
+  });
+
   window.addEventListener('resize', function () {
     var w2 = container.clientWidth, h2 = container.clientHeight;
     if (!w2 || !h2) return;
@@ -116,8 +137,9 @@ function initHeroSphere() {
     posAttr.needsUpdate = true;
 
     if (!reduceMotion) {
-      mesh.rotation.y += 0.0018;
-      mesh.rotation.x += 0.0006;
+      var spinMultiplier = 1 + eggBoost * 9;
+      mesh.rotation.y += 0.0018 * spinMultiplier;
+      mesh.rotation.x += 0.0006 * spinMultiplier;
       glow.rotation.copy(mesh.rotation);
     }
 

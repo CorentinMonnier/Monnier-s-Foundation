@@ -218,10 +218,10 @@ function initScrollGradient() {
   var ticking = false;
 
   var palettes = {
-    home: { top: [255, 255, 255], mid: [238, 242, 248], bottom: [227, 233, 243] },
-    projects: { top: [247, 248, 250], mid: [222, 229, 242], bottom: [199, 209, 232] },
-    about: { top: [255, 255, 255], mid: [242, 236, 224], bottom: [237, 224, 192] },
-    contact: { top: [245, 246, 250], mid: [203, 213, 232], bottom: [157, 175, 206] }
+    home: { top: [8, 8, 10], mid: [10, 10, 15], bottom: [8, 9, 13] },
+    projects: { top: [6, 7, 12], mid: [10, 14, 28], bottom: [16, 22, 42] },
+    about: { top: [8, 8, 11], mid: [9, 10, 17], bottom: [11, 13, 22] },
+    contact: { top: [6, 6, 10], mid: [14, 19, 36], bottom: [22, 31, 56] }
   };
 
   function toRgb(c) {

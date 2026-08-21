@@ -41,17 +41,17 @@ function initHeroSphere() {
   var vertexCount = originalPositions.length / 3;
 
   var material = new THREE.MeshBasicMaterial({
-    color: 0x1D2C52,
+    color: 0xF5F5F5,
     wireframe: true,
     transparent: true,
-    opacity: 0.5
+    opacity: 0.4
   });
   var mesh = new THREE.Mesh(geometry, material);
   scene.add(mesh);
 
-  // subtle non-deforming inner glow for depth
+  // subtle non-deforming inner glow for depth — transparent blue for volume
   var glowGeo = new THREE.SphereGeometry(radius * 0.65, 16, 16);
-  var glowMat = new THREE.MeshBasicMaterial({ color: 0xC79A56, transparent: true, opacity: 0.06 });
+  var glowMat = new THREE.MeshBasicMaterial({ color: 0x4664C8, transparent: true, opacity: 0.15 });
   var glow = new THREE.Mesh(glowGeo, glowMat);
   scene.add(glow);
 
@@ -152,14 +152,14 @@ function initParticleField() {
   var count = 220;
   var positions = new Float32Array(count * 3);
   var colors = new Float32Array(count * 3);
-  var navy = new THREE.Color(0x1D2C52);
-  var gold = new THREE.Color(0xC79A56);
+  var white = new THREE.Color(0xF5F5F5);
+  var blue = new THREE.Color(0x5878D2);
 
   for (var i = 0; i < count; i++) {
     positions[i * 3] = (Math.random() - 0.5) * 1400;
     positions[i * 3 + 1] = (Math.random() - 0.5) * 1400;
     positions[i * 3 + 2] = (Math.random() - 0.5) * 800;
-    var c = Math.random() > 0.5 ? navy : gold;
+    var c = Math.random() > 0.5 ? white : blue;
     colors[i * 3] = c.r;
     colors[i * 3 + 1] = c.g;
     colors[i * 3 + 2] = c.b;

@@ -112,6 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initDragScroll();
   initCardTilt();
   initScrollTilt();
+  initHeroParallax();
   initScrollGradient();
   initLineReveal();
   initMagnetic();
@@ -119,6 +120,7 @@ document.addEventListener('DOMContentLoaded', function () {
   initMobileMenu();
   initCopyEmail();
   initLiveClock();
+  initBookingModal();
 });
 
 /* ---------- Drag-to-scroll project carousel ---------- */
@@ -313,6 +315,36 @@ function initScrollTilt() {
   update();
 }
 
+/* ---------- Hero text fades and lifts as the sphere's camera zooms in
+   (paired with the scroll choreography inside initHeroSphere) ---------- */
+function initHeroParallax() {
+  var home = document.getElementById('home');
+  var heroInner = home ? home.querySelector('.panel-inner.hero') : null;
+  if (!home || !heroInner) return;
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+
+  var ticking2 = false;
+
+  function updateParallax() {
+    var rect = home.getBoundingClientRect();
+    var p = Math.max(0, Math.min(1, -rect.top / rect.height));
+    heroInner.style.opacity = String(Math.max(0, 1 - p * 1.4));
+    heroInner.style.transform = 'translateY(' + (p * -36) + 'px) scale(' + (1 - p * 0.07) + ')';
+    ticking2 = false;
+  }
+
+  window.addEventListener('scroll', function () {
+    if (!ticking2) {
+      ticking2 = true;
+      requestAnimationFrame(updateParallax);
+    }
+  }, { passive: true });
+
+  updateParallax();
+}
+
 /* ---------- Text that reveals word by word as you scroll to it ---------- */
 function wrapWords(el) {
   var text = el.textContent.trim();
@@ -471,6 +503,45 @@ function initLiveClock() {
 
   update();
   setInterval(update, 30000);
+}
+
+/* ---------- Booking modal (Calendly embed) ---------- */
+function initBookingModal() {
+  var trigger = document.getElementById('letsTalkBtn');
+  var overlay = document.getElementById('bookingOverlay');
+  var closeBtn = document.getElementById('bookingClose');
+  if (!trigger || !overlay || !closeBtn) return;
+
+  var lastFocused = null;
+
+  function open() {
+    lastFocused = document.activeElement;
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    closeBtn.focus();
+    document.addEventListener('keydown', onKeydown);
+  }
+
+  function close() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    document.removeEventListener('keydown', onKeydown);
+    if (lastFocused && typeof lastFocused.focus === 'function') {
+      lastFocused.focus();
+    }
+  }
+
+  function onKeydown(e) {
+    if (e.key === 'Escape') {
+      close();
+    }
+  }
+
+  trigger.addEventListener('click', open);
+  closeBtn.addEventListener('click', close);
+  overlay.addEventListener('click', function (e) {
+    if (e.target === overlay) close();
+  });
 }
 
 /* ---------- Magnetic buttons: pull slightly toward the cursor ---------- */

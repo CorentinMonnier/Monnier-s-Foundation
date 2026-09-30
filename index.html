@@ -151,8 +151,11 @@
       <div class="volume-blob volume-blob-contact" aria-hidden="true"></div>
       <div class="panel-inner hero hero-centered">
         <div class="hero-eyebrow" data-en="Get in touch" data-fr="Prenons contact">Get in touch</div>
-        <a class="lets-talk magnetic" href="mailto:corentin.monnier@bluewin.ch" data-en="Let's talk" data-fr="Discutons">Let's talk</a>
-        <button class="copy-email-btn magnetic" id="copyEmailBtn" data-en="or copy email" data-fr="ou copier l'email">or copy email</button>
+        <button class="lets-talk magnetic" id="letsTalkBtn" data-en="Let's talk" data-fr="Discutons">Let's talk</button>
+        <div class="contact-subactions">
+          <span class="contact-subtext" data-en="Book 15 minutes, or" data-fr="Réserve 15 minutes, ou">Book 15 minutes, or</span>
+          <button class="copy-email-btn magnetic" id="copyEmailBtn" data-en="copy email" data-fr="copier l'email">copy email</button>
+        </div>
       </div>
     </section>
 
@@ -162,6 +165,18 @@
     © 2026 Monnier's Foundation — <span id="liveClock"></span>
   </footer>
 
+  <!-- Booking modal (Calendly embed, glassmorphism shell) -->
+  <div class="booking-overlay" id="bookingOverlay" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle">
+    <div class="booking-modal">
+      <div class="booking-modal-header">
+        <span id="bookingModalTitle" data-en="Book 15 minutes" data-fr="Réserver 15 minutes">Book 15 minutes</span>
+        <button class="booking-close" id="bookingClose" aria-label="Close">✕</button>
+      </div>
+      <div class="calendly-inline-widget" data-url="https://calendly.com/corentin-monnier/new-meeting?hide_gdpr_banner=1" style="min-width:280px;height:100%;"></div>
+    </div>
+  </div>
+
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="webgl-effects.js"></script>
   <script src="lang.js"></script>

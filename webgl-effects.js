@@ -32,6 +32,11 @@ function initHeroSphere() {
   var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(w, h);
+  renderer.domElement.setAttribute('role', 'img');
+  renderer.domElement.setAttribute(
+    'aria-label',
+    'Interactive 3D sphere that deforms as you move the cursor over it and reacts to scrolling.'
+  );
   container.appendChild(renderer.domElement);
 
   var radius = 130;
@@ -66,9 +71,26 @@ function initHeroSphere() {
     mouseNX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
     mouseNY = ((e.clientY - rect.top) / rect.height) * 2 - 1;
     targetMouseActive = 1;
+    container.style.cursor = 'pointer';
   });
 
   container.addEventListener('mouseleave', function () {
+    targetMouseActive = 0;
+    container.style.cursor = 'default';
+  });
+
+  // touch support so the deform effect also works on mobile/tablet —
+  // no preventDefault, so the page still scrolls normally under a finger
+  container.addEventListener('touchmove', function (e) {
+    if (!e.touches || !e.touches.length) return;
+    var rect = container.getBoundingClientRect();
+    var t = e.touches[0];
+    mouseNX = ((t.clientX - rect.left) / rect.width) * 2 - 1;
+    mouseNY = ((t.clientY - rect.top) / rect.height) * 2 - 1;
+    targetMouseActive = 1;
+  }, { passive: true });
+
+  container.addEventListener('touchend', function () {
     targetMouseActive = 0;
   });
 
@@ -108,12 +130,41 @@ function initHeroSphere() {
   var tmpOrig = new THREE.Vector3();
   var tmpNormal = new THREE.Vector3();
 
+  // Scroll choreography: as the visitor scrolls through Home, the camera
+  // dollies in toward the sphere and the deformation intensifies, giving
+  // the section a sense of depth instead of a flat cut to Projects.
+  var homeSection = document.getElementById('home');
+  var scrollProgress = 0;
+  var scrollTicking = false;
+
+  function updateScrollProgress() {
+    if (homeSection) {
+      var rect = homeSection.getBoundingClientRect();
+      var p = -rect.top / rect.height;
+      scrollProgress = Math.max(0, Math.min(1, p));
+    }
+    scrollTicking = false;
+  }
+
+  if (!reduceMotion) {
+    window.addEventListener('scroll', function () {
+      if (!scrollTicking) {
+        scrollTicking = true;
+        requestAnimationFrame(updateScrollProgress);
+      }
+    }, { passive: true });
+    updateScrollProgress();
+  }
+
   function animate() {
     requestAnimationFrame(animate);
     var t = clock.getElapsedTime();
 
     mouseActive += (targetMouseActive - mouseActive) * 0.08;
     targetPoint.set(mouseNX, -mouseNY, 0.6).normalize().multiplyScalar(radius);
+
+    var sp = reduceMotion ? 0 : scrollProgress;
+    camera.position.z = 420 - sp * 190;
 
     var positions = posAttr.array;
     for (var i = 0; i < vertexCount; i++) {
@@ -129,7 +180,9 @@ function initHeroSphere() {
       var idle = reduceMotion ? 0 :
         Math.sin(t * 0.6 + tmpOrig.x * 0.04 + tmpOrig.y * 0.04 + tmpOrig.z * 0.04) * idleAmplitude;
 
-      var total = bump + idle;
+      var scrollPulse = sp * 16;
+
+      var total = bump + idle + scrollPulse;
       positions[ix] = tmpOrig.x + tmpNormal.x * total;
       positions[ix + 1] = tmpOrig.y + tmpNormal.y * total;
       positions[ix + 2] = tmpOrig.z + tmpNormal.z * total;
@@ -137,10 +190,11 @@ function initHeroSphere() {
     posAttr.needsUpdate = true;
 
     if (!reduceMotion) {
-      var spinMultiplier = 1 + eggBoost * 9;
+      var spinMultiplier = 1 + eggBoost * 9 + sp * 2.5;
       mesh.rotation.y += 0.0018 * spinMultiplier;
       mesh.rotation.x += 0.0006 * spinMultiplier;
       glow.rotation.copy(mesh.rotation);
+      glow.material.opacity = 0.15 + sp * 0.12;
     }
 
     renderer.render(scene, camera);
@@ -169,6 +223,7 @@ function initParticleField() {
   var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   renderer.setSize(w, h);
+  renderer.domElement.setAttribute('aria-hidden', 'true');
   container.appendChild(renderer.domElement);
 
   var count = 220;
@@ -246,6 +301,7 @@ function initCardOrb() {
   var renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setSize(w, h);
+  renderer.domElement.setAttribute('aria-hidden', 'true');
   el.appendChild(renderer.domElement);
 
   var geo = new THREE.IcosahedronGeometry(1.3, 1);

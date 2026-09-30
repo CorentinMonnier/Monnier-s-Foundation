@@ -79,6 +79,88 @@ body {
   transition: width 0.2s ease-out;
 }
 
+/* ---------- Booking modal (glassmorphism) ---------- */
+.booking-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 260;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(4, 4, 6, 0.55);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.booking-overlay.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.booking-modal {
+  width: min(560px, 100%);
+  height: min(720px, 85vh);
+  background: rgba(14, 14, 18, 0.82);
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px rgba(70, 100, 200, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: translateY(16px) scale(0.98);
+  transition: transform 0.3s ease;
+}
+
+.booking-overlay.open .booking-modal {
+  transform: translateY(0) scale(1);
+}
+
+.booking-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1.3rem;
+  border-bottom: 1px solid var(--color-line);
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--color-ink);
+}
+
+.booking-close {
+  background: none;
+  border: none;
+  color: var(--color-ink-faint);
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.3rem;
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.booking-close:hover,
+.booking-close:focus-visible {
+  color: var(--color-ink);
+}
+
+.booking-close:focus-visible {
+  outline: 2px solid #7C9CE8;
+  outline-offset: 2px;
+}
+
+.booking-modal .calendly-inline-widget {
+  flex: 1;
+}
+
+@media (max-width: 600px) {
+  .booking-modal {
+    height: 90vh;
+  }
+}
+
 /* ---------- Toast ---------- */
 .toast {
   position: fixed;
@@ -523,6 +605,10 @@ section.panel {
   letter-spacing: -0.02em;
   color: var(--color-ink);
   line-height: 1;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
   transition: color 0.25s ease;
 }
 
@@ -530,14 +616,29 @@ section.panel {
   color: #7C9CE8;
 }
 
-.copy-email-btn {
+.contact-subactions {
   margin-top: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.contact-subtext {
+  color: var(--color-ink-faint);
+  font-size: 0.85rem;
+}
+
+.copy-email-btn {
   background: none;
   border: none;
   color: var(--color-ink-faint);
   font-family: var(--font);
   font-size: 0.85rem;
   font-weight: 400;
+  text-decoration: underline;
+  text-underline-offset: 3px;
   cursor: pointer;
   display: inline-block;
   transition: color 0.2s ease;

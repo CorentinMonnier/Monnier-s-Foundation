@@ -1,66 +1,184 @@
-<!doctype html>
-<html lang="fr">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Vif | Art abstrait coloré, imprimé sur toile</title>
-  <meta name="description" content="Toiles abstraites colorées imaginées avec l'IA, imprimées en qualité galerie et livrées en Europe.">
-  <meta name="theme-color" content="#F4F4F2">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23EDEDEB'/%3E%3Ccircle cx='20' cy='12' r='7' fill='%23FF5A36'/%3E%3Cpath d='M4 30a10 10 0 0 1 20 0z' fill='%23FFC93C'/%3E%3C/svg%3E">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Albert+Sans:wght@400;500;600&family=Bodoni+Moda:ital,opsz,wght@0,6..96,500;0,6..96,600;1,6..96,500;1,6..96,600&display=swap">
-  <link rel="stylesheet" href="css/style.css">
-  <!-- GSAP (animations) et Three.js (3D) chargés depuis un CDN -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script type="importmap">{"imports": {"three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}</script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monnier's Foundation</title>
+  <meta name="description" content="Monnier's Foundation — where our projects and ideas live.">
+
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Monnier's Foundation">
+  <meta property="og:description" content="Where our projects and ideas live.">
+  <meta property="og:image" content="og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Monnier's Foundation">
+  <meta name="twitter:description" content="Where our projects and ideas live.">
+  <meta name="twitter:image" content="og-image.png">
+
+  <link rel="stylesheet" href="style.css">
 </head>
-<body data-page="home" data-title="title.home">
-  <header id="site-header"></header>
-  <main>
-    <section class="ring-hero">
-      <div class="ring-stage" id="ring-stage" tabindex="0" role="region" aria-roledescription="carousel" data-i18n-aria="home.ring.label" aria-label="Carrousel des œuvres">
-        <div class="ring-intro">
-          <h1 data-i18n="hero.title">De l'art qui ose la couleur.</h1>
-          <p data-i18n="hero.sub">Des toiles abstraites imaginées avec l'IA, imprimées en qualité galerie et livrées partout en Europe.</p>
-          <span class="ring-hint" data-i18n="home.ring.hint">Glissez pour faire tourner</span>
-        </div>
+<body>
 
-        <div class="ring-panel glass" id="ring-panel">
-          <button class="icon-btn" type="button" id="ring-prev" data-i18n-aria="home.ring.prev" aria-label="Œuvre précédente">‹</button>
-          <div class="ring-info" aria-live="polite">
-            <a class="ring-title" id="ring-title" href="collection.html">&nbsp;</a>
-            <span class="ring-price" id="ring-price"></span>
-          </div>
-          <button class="icon-btn" type="button" id="ring-next" data-i18n-aria="home.ring.next" aria-label="Œuvre suivante">›</button>
-          <div class="ring-actions" id="ring-controls">
-            <a class="btn" id="ring-link" href="collection.html" data-i18n="home.ring.see">Voir l'œuvre</a>
-            <button class="icon-btn" type="button" id="ring-pause" aria-pressed="false" aria-label="Mettre la rotation en pause"><span data-icon aria-hidden="true">❚❚</span></button>
-          </div>
+  <!-- preloader -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-inner">
+      <div class="preloader-mark">Monnier's Foundation</div>
+      <div class="preloader-bar"><div class="preloader-bar-fill" id="preloaderFill"></div></div>
+    </div>
+  </div>
+
+  <!-- toast for copy-email / easter egg -->
+  <div class="toast" id="toast"></div>
+
+  <!-- ambient WebGL particle field, site-wide, behind everything -->
+  <div class="particle-field" id="particleField"></div>
+
+  <div class="cursor-reveal" id="cursorReveal"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-name">Monnier's Foundation</span>
+        <span class="brand-current" id="sectionLabel"></span>
+      </div>
+      <nav>
+        <ul id="navList">
+          <li><a href="#home" class="nav-link magnetic" data-section="home" data-en="Home" data-fr="Accueil">Home</a></li>
+          <li><a href="#projects" class="nav-link magnetic" data-section="projects" data-en="Projects" data-fr="Projets">Projects</a></li>
+          <li><a href="#about" class="nav-link magnetic" data-section="about" data-en="About" data-fr="À propos">About</a></li>
+          <li><a href="#contact" class="nav-link magnetic" data-section="contact" data-en="Contact" data-fr="Contact">Contact</a></li>
+          <li class="lang-toggle">
+            <button class="lang-btn" data-lang="en">EN</button>
+            <button class="lang-btn" data-lang="fr">FR</button>
+          </li>
+        </ul>
+      </nav>
+
+      <button class="mobile-menu-toggle" id="mobileMenuToggle" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  <nav class="dot-nav" aria-label="Section navigation">
+    <a href="#home" class="dot" data-section="home" aria-label="Home"></a>
+    <a href="#projects" class="dot" data-section="projects" aria-label="Projects"></a>
+    <a href="#about" class="dot" data-section="about" aria-label="About"></a>
+    <a href="#contact" class="dot" data-section="contact" aria-label="Contact"></a>
+  </nav>
+
+  <!-- wrapper carrying the CSS perspective for the scroll-linked 3D tilt -->
+  <div class="scroll-perspective" id="scrollPerspective">
+
+    <!-- ============ HOME ============ -->
+    <section class="panel" id="home" data-label-en="Home" data-label-fr="Accueil">
+
+      <div class="volume-blob volume-blob-home" aria-hidden="true"></div>
+      <div id="sphere3d-container" class="hero-sphere"></div>
+
+      <div class="panel-inner hero hero-centered">
+        <div class="hero-brand" data-en="Monnier's Foundation" data-fr="Monnier's Foundation">Monnier's Foundation</div>
+        <h1 id="heroTitle"></h1>
+        <div class="scroll-hint">
+          <span data-en="Scroll" data-fr="Défiler">Scroll</span>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M2 4L6 8L10 4" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
       </div>
     </section>
 
-    <section class="wrap"><div class="room-band glass">
-      <img id="room-preview" alt="" width="1200" height="900">
-      <div class="copy">
-        <h2 data-i18n="home.room.title">Voyez-la chez vous avant de la commander.</h2>
-        <p data-i18n="home.room.text">Sur chaque œuvre, choisissez la pièce et la taille.</p>
-        <a class="btn" href="oeuvre.html?id=maree-haute" data-i18n="home.room.cta">Essayer avec Marée haute</a>
+    <div class="marquee-divider" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span>
+        <span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span>
       </div>
-    </div></section>
+    </div>
 
-    <section class="wrap promise">
-      <h2 data-i18n="home.ai.title">Imaginées avec l'IA, imprimées pour durer.</h2>
-      <div class="promise-grid">
-        <div class="glass"><h3 data-i18n="home.ai.1.t"></h3><p data-i18n="home.ai.1.p"></p></div>
-        <div class="glass"><h3 data-i18n="home.ai.2.t"></h3><p data-i18n="home.ai.2.p"></p></div>
-        <div class="glass"><h3 data-i18n="home.ai.3.t"></h3><p data-i18n="home.ai.3.p"></p></div>
+    <!-- ============ PROJECTS ============ -->
+    <section class="panel" id="projects" data-label-en="Projects" data-label-fr="Projets">
+      <div class="panel-inner projects-layout reveal">
+        <h3 class="projects-heading" data-en="Projects" data-fr="Projets">Projects</h3>
+
+        <div class="project-carousel">
+          <a class="project-card project-card-arctik project-card-large" id="arctikCard" href="https://arctikspike.com/" target="_blank" rel="noopener">
+            <div class="project-card-orb" id="cardOrb"></div>
+
+            <img class="project-card-logo" src="images/arctik-spike-logo.jpg" alt="Arctik Spike logo">
+            <div class="project-card-tag" data-en="Sport Brand · Switzerland" data-fr="Marque de sport · Suisse">Sport Brand · Switzerland</div>
+            <h4 class="project-card-title">Arctik Spike</h4>
+            <p class="project-card-desc line-reveal" data-en="Switzerland's first roundnet (spikeball) brand — a set built to be more durable, better looking, and easier to take anywhere. Corentin leads product development, branding, and go-to-market strategy end to end." data-fr="La première marque suisse de roundnet (spikeball) — un set pensé pour être plus robuste, plus beau et plus nomade. Corentin pilote le développement produit, le branding et la stratégie de lancement de bout en bout.">Switzerland's first roundnet (spikeball) brand — a set built to be more durable, better looking, and easier to take anywhere. Corentin leads product development, branding, and go-to-market strategy end to end.</p>
+            <span class="project-card-link magnetic" data-en="Visit arctikspike.com →" data-fr="Visiter arctikspike.com →">Visit arctikspike.com →</span>
+          </a>
+        </div>
       </div>
-      <a class="more" href="comment.html" data-i18n="home.ai.more">En savoir plus</a>
     </section>
-  </main>
-  <footer id="site-footer"></footer>
-  <script type="module" src="js/pages/home.js"></script>
+
+    <div class="marquee-divider" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span>
+        <span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span>
+      </div>
+    </div>
+
+    <!-- ============ ABOUT ============ -->
+    <section class="panel panel-top" id="about" data-label-en="Corentin Monnier" data-label-fr="Corentin Monnier">
+      <div class="panel-inner person-intro reveal">
+        <img class="person-photo" src="images/corentin.jpg" alt="Corentin Alexandre Monnier">
+
+        <div>
+          <h2 class="person-name">Corentin Alexandre Monnier</h2>
+          <div class="person-role" data-en="Founder. EHL Student. Innovation-driven." data-fr="Fondateur. Étudiant à l'EHL. Tourné vers l'innovation.">Founder. EHL Student. Innovation-driven.</div>
+
+          <p class="person-summary line-reveal" data-en="Founder of Arctik Spike and currently studying at EHL, he is passionate about entrepreneurship, innovation, and turning ideas into tangible projects. He enjoys building from the ground up, exploring new opportunities, and learning through hands-on experience." data-fr="Fondateur d'Arctik Spike et actuellement étudiant à l'EHL, il est passionné par l'entrepreneuriat, l'innovation, et la concrétisation d'idées en projets tangibles. Il aime construire depuis zéro, explorer de nouvelles opportunités, et apprendre par la pratique.">Founder of Arctik Spike and currently studying at EHL, he is passionate about entrepreneurship, innovation, and turning ideas into tangible projects. He enjoys building from the ground up, exploring new opportunities, and learning through hands-on experience.</p>
+
+          <p class="person-summary line-reveal" data-en="Naturally curious and always open to new ideas, he is particularly interested in startups, Venture Capital, and emerging business opportunities. His ambition is to keep learning, creating, and connecting with ambitious people while developing projects that can turn innovative ideas into meaningful ventures." data-fr="Naturellement curieux et toujours ouvert à de nouvelles idées, il s'intéresse particulièrement aux startups, au capital-risque, et aux opportunités d'affaires émergentes. Son ambition est de continuer à apprendre, créer, et se connecter à des personnes ambitieuses, tout en développant des projets capables de transformer des idées innovantes en ventures porteuses de sens.">Naturally curious and always open to new ideas, he is particularly interested in startups, Venture Capital, and emerging business opportunities. His ambition is to keep learning, creating, and connecting with ambitious people while developing projects that can turn innovative ideas into meaningful ventures.</p>
+
+          <p class="contact-line"><span>LinkedIn:</span> <a class="magnetic" href="https://www.linkedin.com/in/corentin-alexandre-monnier-2b15ba343/" target="_blank" rel="noopener">Corentin Alexandre Monnier ↗</a></p>
+        </div>
+      </div>
+    </section>
+
+    <div class="marquee-divider" aria-hidden="true">
+      <div class="marquee-track">
+        <span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span>
+        <span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span><span>Monnier's Foundation</span>
+      </div>
+    </div>
+
+    <!-- ============ CONTACT ============ -->
+    <section class="panel" id="contact" data-label-en="Contact" data-label-fr="Contact">
+      <div class="volume-blob volume-blob-contact" aria-hidden="true"></div>
+      <div class="panel-inner hero hero-centered">
+        <div class="hero-eyebrow" data-en="Get in touch" data-fr="Prenons contact">Get in touch</div>
+        <button class="lets-talk magnetic" id="letsTalkBtn" data-en="Let's talk" data-fr="Discutons">Let's talk</button>
+        <div class="contact-subactions">
+          <span class="contact-subtext" data-en="Book 15 minutes, or" data-fr="Réserve 15 minutes, ou">Book 15 minutes, or</span>
+          <button class="copy-email-btn magnetic" id="copyEmailBtn" data-en="copy email" data-fr="copier l'email">copy email</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    © 2026 Monnier's Foundation — <span id="liveClock"></span>
+  </footer>
+
+  <!-- Booking modal (Calendly embed, glassmorphism shell) -->
+  <div class="booking-overlay" id="bookingOverlay" role="dialog" aria-modal="true" aria-labelledby="bookingModalTitle">
+    <div class="booking-modal">
+      <div class="booking-modal-header">
+        <span id="bookingModalTitle" data-en="Book 15 minutes" data-fr="Réserver 15 minutes">Book 15 minutes</span>
+        <button class="booking-close" id="bookingClose" aria-label="Close">✕</button>
+      </div>
+      <div class="calendly-inline-widget" data-url="https://calendly.com/corentin-monnier/new-meeting?hide_gdpr_banner=1" style="min-width:280px;height:100%;"></div>
+    </div>
+  </div>
+
+  <script src="https://assets.calendly.com/assets/external/widget.js" async></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="webgl-effects.js"></script>
+  <script src="lang.js"></script>
 </body>
 </html>
